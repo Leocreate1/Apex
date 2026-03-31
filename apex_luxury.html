@@ -1,0 +1,2929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>APEX — Elite Athlete OS</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+/* ============================
+   LUXURY DESIGN SYSTEM
+   ============================ */
+:root {
+  --black: #08080d;
+  --obsidian: #0d0d15;
+  --deep: #111119;
+  --surface: #16161f;
+  --surface2: #1c1c28;
+  --surface3: #222232;
+  --border: #2a2a3d;
+  --border2: #363650;
+
+  --gold: #c9a84c;
+  --gold-light: #e8c97a;
+  --gold-dim: #8a6e2f;
+  --gold-bg: rgba(201,168,76,.06);
+  --gold-border: rgba(201,168,76,.18);
+
+  --platinum: #c8ccd8;
+  --platinum-dim: #7a7d8f;
+
+  --run: #4ade9e;
+  --tennis: #fde047;
+  --golf: #60b8ff;
+  --gym: #ff6b5b;
+  --padel: #d8b4fe;
+  --swim: #38d9f5;
+  --bike: #fb923c;
+  --tri: #f0abfc;
+  --ok: #34d399;
+  --warn: #fbbf24;
+  --danger: #f87171;
+
+  --text: #eeeef6;
+  --text-dim: #9999b0;
+  --text-ghost: #44445a;
+
+  --font-display: 'Cormorant Garamond', serif;
+  --font-sans: 'Montserrat', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+
+  --r: 12px;
+  --r-sm: 8px;
+  --gold-gradient: linear-gradient(135deg, #c9a84c 0%, #e8c97a 40%, #c9a84c 60%, #a07830 100%);
+  --gold-text: linear-gradient(135deg, #c9a84c, #f0d88a, #c9a84c);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { height: 100%; }
+
+body {
+  background: var(--black);
+  color: var(--text);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* GRAIN OVERLAY */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* AMBIENT GLOW */
+body::before {
+  content: '';
+  position: fixed;
+  width: 600px; height: 600px;
+  top: -200px; left: -200px;
+  background: radial-gradient(ellipse, rgba(201,168,76,.04) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================
+   AUTH SCREENS
+   ============================ */
+.auth-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  padding: 24px;
+}
+
+.auth-bg {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(201,168,76,.08) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(74,222,158,.04) 0%, transparent 50%);
+  z-index: 0;
+}
+
+.auth-card {
+  background: var(--surface);
+  border: 1px solid var(--gold-border);
+  border-radius: 20px;
+  padding: 52px 48px;
+  width: 100%;
+  max-width: 440px;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 40px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(201,168,76,.05) inset;
+}
+
+.auth-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 60%; height: 1px;
+  background: var(--gold-gradient);
+  border-radius: 1px;
+}
+
+.auth-logo {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.auth-logo-word {
+  font-family: var(--font-display);
+  font-size: 52px;
+  font-weight: 300;
+  letter-spacing: 16px;
+  background: var(--gold-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: block;
+}
+
+.auth-logo-sub {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 4px;
+  color: var(--gold-dim);
+  margin-top: 6px;
+  text-transform: uppercase;
+}
+
+.auth-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+.auth-sub {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 32px;
+  font-weight: 300;
+}
+
+.auth-tabs {
+  display: flex;
+  gap: 0;
+  background: var(--surface2);
+  border-radius: var(--r-sm);
+  padding: 4px;
+  margin-bottom: 28px;
+}
+
+.auth-tab {
+  flex: 1;
+  text-align: center;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  transition: all .2s;
+}
+
+.auth-tab.active {
+  background: var(--surface3);
+  color: var(--gold);
+}
+
+/* FORM ELEMENTS */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.form-input, .form-select {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 13px 16px;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 400;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  -webkit-appearance: none;
+}
+
+.form-input:focus, .form-select:focus {
+  border-color: var(--gold-dim);
+  box-shadow: 0 0 0 3px rgba(201,168,76,.08);
+}
+
+.form-input::placeholder { color: var(--text-ghost); }
+
+.form-select option { background: var(--surface2); }
+
+/* BUTTONS */
+.btn-gold {
+  width: 100%;
+  padding: 15px;
+  background: var(--gold-gradient);
+  border: none;
+  border-radius: var(--r-sm);
+  color: #1a1200;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all .2s;
+  box-shadow: 0 4px 20px rgba(201,168,76,.25);
+}
+
+.btn-gold:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 30px rgba(201,168,76,.35);
+}
+
+.btn-gold:active { transform: translateY(0); }
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border2);
+  border-radius: var(--r-sm);
+  padding: 11px 20px;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+.btn-ghost:hover { background: var(--surface2); color: var(--text); border-color: var(--gold-border); }
+
+.btn-sm {
+  padding: 9px 18px;
+  font-size: 9px;
+  width: auto;
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.auth-link {
+  color: var(--gold);
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-error {
+  background: rgba(248,113,113,.08);
+  border: 1px solid rgba(248,113,113,.2);
+  border-radius: var(--r-sm);
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--danger);
+  margin-bottom: 16px;
+  display: none;
+}
+
+/* ============================
+   MAIN APP LAYOUT
+   ============================ */
+.app {
+  display: none;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+.app.visible { display: flex; }
+
+/* SIDEBAR */
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--obsidian);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.sidebar::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 1px; height: 100%;
+  background: linear-gradient(180deg, transparent, rgba(201,168,76,.15) 30%, rgba(201,168,76,.15) 70%, transparent);
+  pointer-events: none;
+}
+
+.sb-logo {
+  padding: 32px 28px 28px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sb-logo-word {
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 300;
+  letter-spacing: 10px;
+  background: var(--gold-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: block;
+  line-height: 1;
+}
+
+.sb-logo-sub {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: var(--gold-dim);
+  margin-top: 5px;
+  text-transform: uppercase;
+}
+
+.sb-user {
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.sb-user:hover { background: var(--surface); }
+
+.sb-user-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: .5px;
+}
+
+.sb-user-stats {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-dim);
+  margin-top: 4px;
+  letter-spacing: 1px;
+}
+
+.sb-user-badges {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--gold-border);
+  color: var(--gold);
+  background: var(--gold-bg);
+  text-transform: uppercase;
+}
+
+.badge.platinum {
+  border-color: rgba(200,204,216,.2);
+  color: var(--platinum);
+  background: rgba(200,204,216,.05);
+}
+
+/* NAV */
+.sb-nav { padding: 20px 16px; flex: 1; }
+
+.sb-nav-section { margin-bottom: 24px; }
+
+.sb-nav-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: var(--text-ghost);
+  text-transform: uppercase;
+  padding: 0 12px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sb-nav-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.ni {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-dim);
+  border: 1px solid transparent;
+  transition: all .15s;
+  position: relative;
+  letter-spacing: .3px;
+  user-select: none;
+}
+
+.ni:hover { background: var(--surface); color: var(--text); }
+
+.ni.active {
+  background: var(--gold-bg);
+  border-color: var(--gold-border);
+  color: var(--gold-light);
+}
+
+.ni .ico { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
+
+.ni .dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  margin-left: auto;
+  opacity: 0;
+  flex-shrink: 0;
+}
+
+.ni.active .dot { opacity: 1; background: var(--gold); }
+
+/* SB FOOTER */
+.sb-footer {
+  padding: 20px 28px;
+  border-top: 1px solid var(--border);
+}
+
+.sb-logout {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--text-ghost);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: color .2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sb-logout:hover { color: var(--danger); }
+
+/* ============================
+   MAIN CONTENT
+   ============================ */
+.main {
+  flex: 1;
+  padding: 44px 48px;
+  overflow-y: auto;
+  min-width: 0;
+  position: relative;
+}
+
+/* PAGE HEADERS */
+.page-header {
+  margin-bottom: 36px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-weight: 300;
+  letter-spacing: 3px;
+  line-height: .9;
+  color: var(--text);
+}
+
+.page-title.gold {
+  background: var(--gold-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.page-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.page-date {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-ghost);
+  letter-spacing: 1px;
+}
+
+/* SECTION TITLES */
+.section-title {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border), transparent);
+}
+
+/* CARDS */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-gold {
+  background: var(--gold-bg);
+  border-color: var(--gold-border);
+}
+
+.card-title {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+/* STAT CARDS */
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 22px;
+  position: relative;
+  overflow: hidden;
+  transition: transform .2s, border-color .2s, box-shadow .2s;
+}
+
+.stat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,.4);
+}
+
+.stat::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: var(--gold-gradient);
+  opacity: 0;
+  transition: opacity .2s;
+}
+
+.stat:hover::before { opacity: 1; }
+
+.stat.gold-accent::before { opacity: 1; }
+
+.stat-lbl {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.stat-val {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--text);
+  letter-spacing: -1px;
+}
+
+.stat-unit {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-top: 6px;
+  letter-spacing: 1px;
+}
+
+/* GRIDS */
+.g4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+.g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 24px; }
+.g2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-bottom: 24px; }
+.g2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 24px; }
+
+/* PAGES */
+.pv { display: none; }
+.pv.active {
+  display: block;
+  animation: fadeUp .3s ease forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* PILLS */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.pill.gold { background: var(--gold-bg); color: var(--gold); border: 1px solid var(--gold-border); }
+.pill.ok { background: rgba(52,211,153,.08); color: var(--ok); border: 1px solid rgba(52,211,153,.2); }
+.pill.warn { background: rgba(251,191,36,.08); color: var(--warn); border: 1px solid rgba(251,191,36,.2); }
+.pill.danger { background: rgba(248,113,113,.08); color: var(--danger); border: 1px solid rgba(248,113,113,.2); }
+.pill.run { background: rgba(74,222,158,.08); color: var(--run); border: 1px solid rgba(74,222,158,.2); }
+.pill.tri { background: rgba(240,171,252,.08); color: var(--tri); border: 1px solid rgba(240,171,252,.2); }
+
+/* LOG ITEMS */
+.log-list { display: flex; flex-direction: column; gap: 8px; }
+
+.li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--surface2);
+  border-radius: var(--r-sm);
+  border: 1px solid transparent;
+  transition: border-color .15s, background .15s;
+  cursor: default;
+}
+
+.li:hover { border-color: var(--gold-border); background: var(--surface3); }
+
+.li-icon {
+  width: 38px; height: 38px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+
+.li-info { flex: 1; min-width: 0; }
+
+.li-title {
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text);
+}
+
+.li-meta {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--text-dim);
+  margin-top: 3px;
+  letter-spacing: .3px;
+}
+
+.li-val {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 300;
+  flex-shrink: 0;
+  letter-spacing: .5px;
+}
+
+/* PROGRESS BARS */
+.prog-wrap { height: 4px; background: var(--surface3); border-radius: 2px; overflow: hidden; margin-top: 8px; }
+.prog-fill { height: 100%; border-radius: 2px; transition: width .6s ease; }
+
+/* READINESS DISPLAY */
+.readiness-bar {
+  display: flex;
+  height: 36px;
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin-top: 12px;
+}
+
+.rb-seg {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  opacity: .25;
+  transition: opacity .3s;
+  border-right: 1px solid var(--border);
+}
+
+.rb-seg:last-child { border-right: none; }
+.rb-seg.active { opacity: 1; }
+
+/* RECOVERY RING */
+.rec-ring-wrap { position: relative; width: 130px; height: 130px; flex-shrink: 0; }
+.rec-ring-wrap svg { transform: rotate(-90deg); }
+.rec-ring-inner {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.rec-ring-num { font-family: var(--font-display); font-size: 42px; font-weight: 300; line-height: 1; }
+.rec-ring-lbl { font-family: var(--font-mono); font-size: 8px; color: var(--text-dim); letter-spacing: 2px; margin-top: 2px; }
+
+/* RISK BAR */
+.risk-bar { height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--ok), var(--warn) 50%, var(--danger)); position: relative; margin-top: 10px; }
+.risk-needle {
+  position: absolute; top: -4px;
+  width: 16px; height: 16px;
+  background: var(--text);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 2px 8px rgba(0,0,0,.6);
+  transition: left .5s cubic-bezier(.34,1.56,.64,1);
+}
+
+/* HEATMAP */
+.heatmap { display: grid; grid-template-columns: repeat(53,1fr); gap: 2px; }
+.hm-col { display: flex; flex-direction: column; gap: 2px; }
+.hm-c {
+  width: 100%; aspect-ratio: 1;
+  border-radius: 2px;
+  background: var(--surface3);
+  cursor: pointer;
+  transition: transform .1s;
+}
+.hm-c:hover { transform: scale(1.8); z-index: 10; position: relative; }
+.hm-c.l1 { background: rgba(201,168,76,.2); }
+.hm-c.l2 { background: rgba(201,168,76,.4); }
+.hm-c.l3 { background: rgba(201,168,76,.7); }
+.hm-c.l4 { background: rgba(201,168,76,1); }
+
+/* PERCENTILE ROWS */
+.pct-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.pct-row:last-child { border: none; }
+.pct-lbl { font-size: 12px; font-weight: 500; width: 110px; flex-shrink: 0; color: var(--text); }
+.pct-bar-wrap { flex: 1; height: 4px; background: var(--surface3); border-radius: 2px; overflow: hidden; }
+.pct-bar-fill { height: 100%; border-radius: 2px; transition: width .7s ease; }
+.pct-num {
+  font-family: var(--font-display);
+  font-size: 22px; font-weight: 300;
+  width: 55px; text-align: right;
+  flex-shrink: 0;
+}
+
+/* IRONMAN CARD */
+.iron-card {
+  background: linear-gradient(135deg, var(--surface) 0%, rgba(240,171,252,.04) 100%);
+  border: 1px solid rgba(240,171,252,.15);
+  border-radius: var(--r);
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.iron-card::after {
+  content: '140.6';
+  position: absolute; right: -16px; top: -8px;
+  font-family: var(--font-display);
+  font-size: 110px; font-weight: 300;
+  color: rgba(240,171,252,.05);
+  line-height: 1;
+  pointer-events: none;
+  letter-spacing: -4px;
+}
+
+/* RACE PREDICTOR */
+.pred-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 0; border-bottom: 1px solid var(--border);
+}
+.pred-row:last-child { border: none; }
+.pred-name { font-size: 13px; font-weight: 500; color: var(--text); }
+.pred-note { font-family: var(--font-mono); font-size: 9px; color: var(--text-dim); margin-top: 2px; }
+.pred-time { font-family: var(--font-display); font-size: 24px; font-weight: 300; }
+.pred-tag { font-family: var(--font-mono); font-size: 9px; letter-spacing: 1px; text-align: right; margin-top: 2px; }
+
+/* LEADERBOARD */
+.lb-row {
+  display: flex; align-items: center; gap: 16px;
+  padding: 16px 20px;
+  background: var(--surface2);
+  border-radius: var(--r-sm);
+  border: 1px solid transparent;
+  margin-bottom: 8px;
+  transition: all .2s;
+}
+.lb-row:hover { border-color: var(--gold-border); }
+.lb-row.rank-1 { background: var(--gold-bg); border-color: var(--gold-border); }
+.lb-row.rank-2 { border-color: rgba(200,204,216,.15); }
+.lb-row.rank-3 { border-color: rgba(180,120,60,.15); }
+.lb-rank { font-family: var(--font-display); font-size: 28px; font-weight: 300; width: 36px; flex-shrink: 0; }
+.lb-info { flex: 1; }
+.lb-name { font-size: 14px; font-weight: 600; color: var(--text); }
+.lb-meta { font-family: var(--font-mono); font-size: 9px; color: var(--text-dim); margin-top: 3px; letter-spacing: .5px; }
+.lb-val { font-family: var(--font-display); font-size: 26px; font-weight: 300; flex-shrink: 0; }
+.lb-you { font-family: var(--font-mono); font-size: 8px; color: var(--gold); letter-spacing: 1px; margin-left: 8px; }
+
+/* FRIEND LEADERBOARD */
+.friend-code-box {
+  background: var(--surface2);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--r-sm);
+  padding: 16px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+}
+.friend-code {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  letter-spacing: 4px;
+  color: var(--gold-light);
+}
+.friend-code-lbl { font-family: var(--font-mono); font-size: 9px; color: var(--text-dim); letter-spacing: 1px; margin-bottom: 4px; }
+
+/* HIGHLIGHT CARDS */
+.hl-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 18px;
+  text-align: center;
+  transition: all .2s;
+}
+.hl-card:hover { border-color: var(--gold-border); }
+.hl-icon { font-size: 26px; margin-bottom: 8px; }
+.hl-val { font-family: var(--font-display); font-size: 32px; font-weight: 300; line-height: 1; color: var(--text); }
+.hl-lbl { font-family: var(--font-mono); font-size: 8px; color: var(--text-dim); letter-spacing: 2px; margin-top: 5px; text-transform: uppercase; }
+
+/* TIMELINE */
+.timeline { position: relative; padding-left: 22px; }
+.timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 1px; background: linear-gradient(180deg, var(--gold-border), transparent); }
+.tl-item { position: relative; margin-bottom: 18px; }
+.tl-dot { position: absolute; left: -19px; top: 4px; width: 8px; height: 8px; border-radius: 50%; border: 1px solid; }
+.tl-date { font-family: var(--font-mono); font-size: 9px; color: var(--text-dim); margin-bottom: 3px; letter-spacing: 1px; }
+.tl-text { font-size: 13px; font-weight: 400; color: var(--text); line-height: 1.5; }
+
+/* PERFORMANCE AGE */
+.perf-age-display { display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px; }
+.pa-num { font-family: var(--font-display); font-size: 72px; font-weight: 300; line-height: 1; }
+.pa-unit { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); letter-spacing: 1px; }
+
+/* CHART WRAPPERS */
+.chart-wrap { position: relative; width: 100%; height: 200px; }
+.chart-wrap-tall { position: relative; width: 100%; height: 280px; }
+
+/* IRONMAN PLAN */
+.plan-cell {
+  padding: 6px 3px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  text-align: center;
+  cursor: pointer;
+  line-height: 1.3;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .15s;
+}
+.plan-cell:hover { transform: scale(1.05); z-index: 2; position: relative; }
+
+/* MODAL */
+.modal {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.75);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  backdrop-filter: blur(4px);
+}
+.modal.open { display: flex; }
+.modal-box {
+  background: var(--surface);
+  border: 1px solid var(--gold-border);
+  border-radius: 16px;
+  padding: 36px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 40px 80px rgba(0,0,0,.7);
+  position: relative;
+}
+.modal-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 40%; height: 1px;
+  background: var(--gold-gradient);
+}
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 32px; font-weight: 300;
+  letter-spacing: 1px;
+  margin-bottom: 24px;
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  background: var(--surface);
+  border: 1px solid var(--gold-border);
+  color: var(--text);
+  padding: 14px 22px;
+  border-radius: var(--r-sm);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .5px;
+  z-index: 9998;
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all .3s cubic-bezier(.34,1.56,.64,1);
+  box-shadow: 0 12px 40px rgba(0,0,0,.5);
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-dim); }
+
+/* SLEEP PAGE */
+.sleep-big { font-family: var(--font-display); font-size: 64px; font-weight: 300; line-height: 1; }
+
+/* RESPONSIVE */
+@media(max-width: 960px) {
+  .sidebar { width: 70px; min-width: 70px; }
+  .sb-logo-sub, .sb-logo-word + *, .sb-user-stats, .sb-user-badges, .sb-user-name, .ni > span:not(.ico):not(.dot) { display: none; }
+  .sb-logo-word { font-size: 22px; letter-spacing: 4px; }
+  .sb-nav-label { display: none; }
+  .main { padding: 24px 20px; }
+  .g4 { grid-template-columns: repeat(2,1fr); }
+  .g3 { grid-template-columns: repeat(2,1fr); }
+  .page-title { font-size: 44px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================
+     AUTH SCREENS
+     ============================ -->
+<div id="auth-wrap" class="auth-wrap">
+  <div class="auth-bg"></div>
+
+  <div class="auth-card" id="auth-card">
+    <div class="auth-logo">
+      <span class="auth-logo-word">APEX</span>
+      <div class="auth-logo-sub">Elite Athlete OS</div>
+    </div>
+
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Sign In</div>
+      <div class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Create Account</div>
+    </div>
+
+    <div id="auth-error" class="auth-error"></div>
+
+    <!-- LOGIN -->
+    <div id="form-login">
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input type="text" class="form-input" id="login-user" placeholder="Enter your username" autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="login-pass" placeholder="Enter your password" autocomplete="current-password">
+      </div>
+      <button class="btn-gold" onclick="doLogin()" style="margin-top:8px">Enter</button>
+      <div class="auth-switch">No account? <span class="auth-link" onclick="switchAuthTab('register')">Create one</span></div>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="form-register" style="display:none">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-input" id="reg-name" placeholder="Your name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input type="text" class="form-input" id="reg-user" placeholder="Choose a username" autocomplete="new-username">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="reg-pass" placeholder="Choose a password" autocomplete="new-password">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group">
+          <label class="form-label">Age</label>
+          <input type="number" class="form-input" id="reg-age" placeholder="28">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Sex</label>
+          <select class="form-select" id="reg-sex"><option value="M">Male</option><option value="F">Female</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Height (cm)</label>
+          <input type="number" class="form-input" id="reg-height" placeholder="192">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Weight (kg)</label>
+          <input type="number" class="form-input" id="reg-weight" placeholder="82">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">VO₂ Max (optional — from Coros/Garmin)</label>
+        <input type="number" class="form-input" id="reg-vo2" placeholder="e.g. 58">
+      </div>
+      <button class="btn-gold" onclick="doRegister()" style="margin-top:8px">Create Account</button>
+      <div class="auth-switch">Have an account? <span class="auth-link" onclick="switchAuthTab('login')">Sign in</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     MAIN APP
+     ============================ -->
+<div class="app" id="main-app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <span class="sb-logo-word">APEX</span>
+      <div class="sb-logo-sub">Elite Athlete OS</div>
+    </div>
+
+    <div class="sb-user" onclick="openProfileModal()">
+      <div class="sb-user-name" id="sb-name">Athlete</div>
+      <div class="sb-user-stats" id="sb-stats">192cm · 82kg</div>
+      <div class="sb-user-badges" id="sb-badges">
+        <div class="badge" id="sb-vo2-badge">VO₂ 58</div>
+        <div class="badge platinum">Ironman</div>
+      </div>
+    </div>
+
+    <nav class="sb-nav">
+      <div class="sb-nav-section">
+        <div class="sb-nav-label">Command</div>
+        <div class="ni active" onclick="nav('dashboard',this)"><span class="ico">◈</span><span>Dashboard</span><span class="dot"></span></div>
+        <div class="ni" onclick="nav('log',this)"><span class="ico">＋</span><span>Log Activity</span><span class="dot"></span></div>
+        <div class="ni" onclick="nav('recovery',this)"><span class="ico">◎</span><span>Recovery</span><span class="dot"></span></div>
+        <div class="ni" onclick="nav('sleep',this)"><span class="ico">◐</span><span>Sleep & Wellness</span><span class="dot"></span></div>
+      </div>
+
+      <div class="sb-nav-section">
+        <div class="sb-nav-label">Disciplines</div>
+        <div class="ni" onclick="nav('running',this)"><span class="ico">🏃</span><span>Running</span><span class="dot"></span></div>
+        <div class="ni" onclick="nav('tennis',this)"><span class="ico">🎾</span><span>Tennis</span><span class="dot"></span></div>
+        <div class="ni" onclick="nav('padel',this)"><span class="ico">🏓</span><span>Padel</span><span class="dot"></span></div>
+        <div class="ni" onclick="nav('golf',this)"><span class="ico">⛳</span><span>Golf</span><span class="dot"></span></div>
+        <div class="ni" onclick="nav('gym',this)"><span class="ico">💪</span><span>Gym</span><span class="dot"></span></div>
+        <div class="ni" onclick="nav('swim',this)"><span class="ico">🏊</span><span>Swimming</span><span class="dot"></span></div>
+        <div class="ni" onclick="nav('bike',this)"><span class="ico">🚴</span><span>Cycling</span><span class="dot"></span></div>
+      </div>
+
+      <div class="sb-nav-section">
+        <div class="sb-nav-label">Intelligence</div>
+        <div class="ni" onclick="nav('ironman',this)"><span class="ico">🏅</span><span>Ironman Plan</span><span class="dot"></span></div>
+        <div class="ni" onclick="nav('analytics',this)"><span class="ico">◑</span><span>Analytics</span><span class="dot"></span></div>
+        <div class="ni" onclick="nav('leaderboard',this)"><span class="ico">◆</span><span>PR Leaderboard</span><span class="dot"></span></div>
+        <div class="ni" onclick="nav('friends',this)"><span class="ico">◇</span><span>Friends</span><span class="dot"></span></div>
+        <div class="ni" onclick="nav('body',this)"><span class="ico">○</span><span>Body Metrics</span><span class="dot"></span></div>
+      </div>
+    </nav>
+
+    <div class="sb-footer">
+      <div class="sb-logout" onclick="doLogout()">
+        <span>↖</span><span>Sign Out</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <div id="page-dashboard" class="pv active">
+      <div class="page-header">
+        <div>
+          <div class="page-eyebrow">Overview</div>
+          <div class="page-title">Dashboard</div>
+          <div class="page-date" id="dash-date" style="margin-top:8px"></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap" id="dash-pills"></div>
+      </div>
+
+      <div class="g2" style="margin-bottom:24px">
+        <div class="card card-gold">
+          <div class="card-title">Readiness Status</div>
+          <div style="font-family:var(--font-display);font-size:36px;font-weight:300;margin-bottom:10px;letter-spacing:1px" id="readiness-label">Calculating...</div>
+          <div class="readiness-bar">
+            <div class="rb-seg" id="rb-under" style="background:rgba(248,113,113,.15);color:var(--danger)">Undertrained</div>
+            <div class="rb-seg" id="rb-mod" style="background:rgba(251,191,36,.15);color:var(--warn)">Moderate</div>
+            <div class="rb-seg" id="rb-ready" style="background:rgba(52,211,153,.15);color:var(--ok)">Peak</div>
+            <div class="rb-seg" id="rb-over" style="background:rgba(248,113,113,.15);color:var(--danger)">Overtrained</div>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-top:10px;letter-spacing:.5px" id="readiness-sub"></div>
+        </div>
+        <div class="card" id="ai-rec">
+          <div class="card-title">Today's Recommendation</div>
+          <div style="font-family:var(--font-display);font-size:20px;font-weight:400;margin-bottom:6px" id="rec-title-el">Log activities to get coaching</div>
+          <div style="font-family:var(--font-sans);font-size:12px;font-weight:300;color:var(--text-dim);line-height:1.7" id="rec-detail-el">Your smart coach will analyse your training load and recovery to suggest today's optimal session.</div>
+        </div>
+      </div>
+
+      <div class="section-title">This Week</div>
+      <div class="g4">
+        <div class="stat gold-accent">
+          <div class="stat-lbl">Running KM</div>
+          <div class="stat-val" id="d-run-km">0</div>
+          <div class="stat-unit">km this week</div>
+        </div>
+        <div class="stat">
+          <div class="stat-lbl">Calories Today</div>
+          <div class="stat-val" id="d-cals">–</div>
+          <div class="stat-unit">kcal (activity + BMR)</div>
+        </div>
+        <div class="stat">
+          <div class="stat-lbl">Training Load</div>
+          <div class="stat-val" id="d-load">0</div>
+          <div class="stat-unit">7-day TSS</div>
+        </div>
+        <div class="stat">
+          <div class="stat-lbl">Active Hours</div>
+          <div class="stat-val" id="d-hours">0</div>
+          <div class="stat-unit">hrs this week</div>
+        </div>
+      </div>
+
+      <div class="section-title">All-Time Highlights</div>
+      <div class="g4" style="margin-bottom:24px">
+        <div class="hl-card"><div class="hl-icon">🔥</div><div class="hl-val" id="hl-cals">–</div><div class="hl-lbl">Peak Calories / Day</div></div>
+        <div class="hl-card"><div class="hl-icon">⏱</div><div class="hl-val" id="hl-hours">–</div><div class="hl-lbl">Most Hours / Day</div></div>
+        <div class="hl-card"><div class="hl-icon">📏</div><div class="hl-val" id="hl-km">–</div><div class="hl-lbl">Longest Run</div></div>
+        <div class="hl-card"><div class="hl-icon">🔗</div><div class="hl-val" id="hl-streak">0</div><div class="hl-lbl">Day Streak</div></div>
+      </div>
+
+      <div class="g2" style="margin-bottom:24px">
+        <div class="card">
+          <div class="card-title">Athlete Percentiles</div>
+          <div id="percentile-rows"></div>
+          <div style="font-family:var(--font-mono);font-size:8px;color:var(--text-ghost);margin-top:12px;letter-spacing:.5px">Versus recreational to competitive athletic population</div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-title">Performance Age</div>
+            <div class="perf-age-display">
+              <div class="pa-num" id="perf-age" style="background:var(--gold-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">–</div>
+              <div class="pa-unit">years</div>
+            </div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);line-height:1.6" id="perf-age-desc"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Weekly Volume vs Population</div>
+            <div style="font-family:var(--font-display);font-size:52px;font-weight:300;line-height:1;background:var(--gold-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" id="vol-pct">–</div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-top:6px" id="vol-pct-desc"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">Activity Heatmap</div>
+      <div class="card" style="margin-bottom:24px;overflow-x:auto">
+        <div class="heatmap" id="heatmap" style="margin-top:8px"></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:12px;font-family:var(--font-mono);font-size:8px;color:var(--text-dim)">
+          Less
+          <div style="width:9px;height:9px;border-radius:2px;background:var(--surface3)"></div>
+          <div style="width:9px;height:9px;border-radius:2px;background:rgba(201,168,76,.2)"></div>
+          <div style="width:9px;height:9px;border-radius:2px;background:rgba(201,168,76,.4)"></div>
+          <div style="width:9px;height:9px;border-radius:2px;background:rgba(201,168,76,.7)"></div>
+          <div style="width:9px;height:9px;border-radius:2px;background:rgba(201,168,76,1)"></div>
+          More
+        </div>
+      </div>
+
+      <div class="g2" style="margin-bottom:24px">
+        <div class="card">
+          <div class="card-title">Injury Risk</div>
+          <div style="font-family:var(--font-display);font-size:30px;font-weight:300;margin-bottom:6px" id="injury-label">–</div>
+          <div class="risk-bar"><div class="risk-needle" id="injury-needle" style="left:20%"></div></div>
+          <div style="display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:8px;color:var(--text-dim);margin-top:5px"><span>Low</span><span>Moderate</span><span>High</span></div>
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-top:12px;white-space:pre-line;line-height:1.7" id="injury-factors"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Recovery Score</div>
+          <div style="display:flex;align-items:center;gap:20px">
+            <div class="rec-ring-wrap">
+              <svg width="130" height="130" viewBox="0 0 130 130">
+                <circle cx="65" cy="65" r="54" fill="none" stroke="rgba(201,168,76,.1)" stroke-width="8"/>
+                <circle cx="65" cy="65" r="54" fill="none" stroke="var(--gold)" stroke-width="8" stroke-linecap="round" stroke-dasharray="339" id="rec-circle" stroke-dashoffset="339"/>
+              </svg>
+              <div class="rec-ring-inner">
+                <div class="rec-ring-num" id="rec-score" style="background:var(--gold-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">–</div>
+                <div class="rec-ring-lbl">Recovery</div>
+              </div>
+            </div>
+            <div style="flex:1">
+              <div style="font-family:var(--font-display);font-size:22px;font-weight:300;margin-bottom:6px" id="rec-label">–</div>
+              <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);line-height:1.7" id="rec-desc"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">Recent Activity</div>
+      <div class="card"><div id="recent-log"></div></div>
+    </div>
+
+    <!-- LOG ACTIVITY -->
+    <div id="page-log" class="pv">
+      <div class="page-header">
+        <div>
+          <div class="page-eyebrow">Training</div>
+          <div class="page-title">Log Activity</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">New Entry</div>
+        <div class="g2" style="margin-bottom:18px">
+          <div class="form-group"><label class="form-label">Sport</label>
+            <select class="form-select" id="log-sport" onchange="updateLogFields()">
+              <option value="run">🏃 Running</option>
+              <option value="tennis">🎾 Tennis</option>
+              <option value="padel">🏓 Padel</option>
+              <option value="golf">⛳ Golf</option>
+              <option value="gym">💪 Gym</option>
+              <option value="swim">🏊 Swimming</option>
+              <option value="bike">🚴 Cycling</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Date</label><input type="date" class="form-input" id="log-date"></div>
+        </div>
+        <div id="fields-run">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px">
+            <div class="form-group"><label class="form-label">Distance (km)</label><input type="number" class="form-input" id="r-dist" placeholder="12.5" step="0.1"></div>
+            <div class="form-group"><label class="form-label">Duration (min)</label><input type="number" class="form-input" id="r-dur" placeholder="65"></div>
+            <div class="form-group"><label class="form-label">Avg HR (bpm)</label><input type="number" class="form-input" id="r-hr" placeholder="145"></div>
+            <div class="form-group"><label class="form-label">Elevation (m)</label><input type="number" class="form-input" id="r-elev" placeholder="120"></div>
+            <div class="form-group"><label class="form-label">Run Type</label><select class="form-select" id="r-type"><option>Easy Run</option><option>Tempo</option><option>Intervals</option><option>Long Run</option><option>Recovery</option><option>Trail</option><option>Race</option></select></div>
+            <div class="form-group"><label class="form-label">RPE (1–10)</label><input type="number" class="form-input" id="r-rpe" placeholder="5" min="1" max="10"></div>
+          </div>
+        </div>
+        <div id="fields-tennis" style="display:none">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px">
+            <div class="form-group"><label class="form-label">Opponent</label><input type="text" class="form-input" id="ten-opp" placeholder="Name"></div>
+            <div class="form-group"><label class="form-label">Result</label><select class="form-select" id="ten-res"><option value="W">Win</option><option value="L">Loss</option></select></div>
+            <div class="form-group"><label class="form-label">Score</label><input type="text" class="form-input" id="ten-score" placeholder="6-3, 7-5"></div>
+            <div class="form-group"><label class="form-label">Surface</label><select class="form-select" id="ten-surf"><option>Clay</option><option>Hard</option><option>Grass</option><option>Indoor</option></select></div>
+            <div class="form-group"><label class="form-label">Duration (min)</label><input type="number" class="form-input" id="ten-dur" placeholder="90"></div>
+            <div class="form-group"><label class="form-label">Quality (1–10)</label><input type="number" class="form-input" id="ten-qual" placeholder="7"></div>
+          </div>
+        </div>
+        <div id="fields-padel" style="display:none">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px">
+            <div class="form-group"><label class="form-label">Partner</label><input type="text" class="form-input" id="pad-partner" placeholder="Partner name"></div>
+            <div class="form-group"><label class="form-label">Result</label><select class="form-select" id="pad-res"><option value="W">Win</option><option value="L">Loss</option></select></div>
+            <div class="form-group"><label class="form-label">Duration (min)</label><input type="number" class="form-input" id="pad-dur" placeholder="75"></div>
+            <div class="form-group"><label class="form-label">Score</label><input type="text" class="form-input" id="pad-score" placeholder="6-4, 3-6, 6-2"></div>
+            <div class="form-group"><label class="form-label">Venue</label><select class="form-select" id="pad-venue"><option>Indoor</option><option>Outdoor</option></select></div>
+            <div class="form-group"><label class="form-label">Intensity (1–10)</label><input type="number" class="form-input" id="pad-int" placeholder="7"></div>
+          </div>
+        </div>
+        <div id="fields-golf" style="display:none">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px">
+            <div class="form-group"><label class="form-label">Course</label><input type="text" class="form-input" id="g-course" placeholder="Course name"></div>
+            <div class="form-group"><label class="form-label">Gross Score</label><input type="number" class="form-input" id="g-score" placeholder="82"></div>
+            <div class="form-group"><label class="form-label">Par</label><input type="number" class="form-input" id="g-par" placeholder="72" value="72"></div>
+            <div class="form-group"><label class="form-label">Fairways Hit</label><input type="number" class="form-input" id="g-fir" placeholder="9"></div>
+            <div class="form-group"><label class="form-label">GIR</label><input type="number" class="form-input" id="g-gir" placeholder="10"></div>
+            <div class="form-group"><label class="form-label">Putts</label><input type="number" class="form-input" id="g-putts" placeholder="32"></div>
+          </div>
+        </div>
+        <div id="fields-gym" style="display:none">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px">
+            <div class="form-group"><label class="form-label">Session Type</label><select class="form-select" id="gym-type"><option>Push</option><option>Pull</option><option>Legs</option><option>Full Body</option><option>Core</option><option>Conditioning</option></select></div>
+            <div class="form-group"><label class="form-label">Duration (min)</label><input type="number" class="form-input" id="gym-dur" placeholder="60"></div>
+            <div class="form-group"><label class="form-label">Volume (kg)</label><input type="number" class="form-input" id="gym-vol" placeholder="4500"></div>
+            <div class="form-group"><label class="form-label">PR Achieved</label><input type="text" class="form-input" id="gym-pr" placeholder="Squat 120kg x5"></div>
+            <div class="form-group"><label class="form-label">RPE (1–10)</label><input type="number" class="form-input" id="gym-rpe" placeholder="7"></div>
+          </div>
+        </div>
+        <div id="fields-swim" style="display:none">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px">
+            <div class="form-group"><label class="form-label">Distance (m)</label><input type="number" class="form-input" id="sw-dist" placeholder="2000"></div>
+            <div class="form-group"><label class="form-label">Duration (min)</label><input type="number" class="form-input" id="sw-dur" placeholder="45"></div>
+            <div class="form-group"><label class="form-label">Type</label><select class="form-select" id="sw-type"><option>Pool</option><option>Open Water</option></select></div>
+            <div class="form-group"><label class="form-label">Avg HR</label><input type="number" class="form-input" id="sw-hr" placeholder="135"></div>
+            <div class="form-group"><label class="form-label">Stroke</label><select class="form-select" id="sw-stroke"><option>Freestyle</option><option>Backstroke</option><option>Breaststroke</option><option>Butterfly</option><option>Mixed</option></select></div>
+            <div class="form-group"><label class="form-label">RPE (1–10)</label><input type="number" class="form-input" id="sw-rpe" placeholder="6"></div>
+          </div>
+        </div>
+        <div id="fields-bike" style="display:none">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px">
+            <div class="form-group"><label class="form-label">Distance (km)</label><input type="number" class="form-input" id="bk-dist" placeholder="80" step="0.1"></div>
+            <div class="form-group"><label class="form-label">Duration (min)</label><input type="number" class="form-input" id="bk-dur" placeholder="150"></div>
+            <div class="form-group"><label class="form-label">Avg HR</label><input type="number" class="form-input" id="bk-hr" placeholder="140"></div>
+            <div class="form-group"><label class="form-label">Elevation (m)</label><input type="number" class="form-input" id="bk-elev" placeholder="800"></div>
+            <div class="form-group"><label class="form-label">Type</label><select class="form-select" id="bk-type"><option>Road</option><option>MTB</option><option>Indoor/Trainer</option><option>Triathlon</option></select></div>
+            <div class="form-group"><label class="form-label">RPE (1–10)</label><input type="number" class="form-input" id="bk-rpe" placeholder="6"></div>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:20px"><label class="form-label">Notes</label><input type="text" class="form-input" id="log-notes" placeholder="How did it feel? Any observations..."></div>
+        <div style="display:flex;gap:10px">
+          <button class="btn-gold btn-sm" onclick="saveActivity()">Save Entry</button>
+          <button class="btn-ghost" onclick="clearLogForm()">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECOVERY -->
+    <div id="page-recovery" class="pv">
+      <div class="page-header">
+        <div><div class="page-eyebrow">Physiology</div><div class="page-title">Recovery</div></div>
+      </div>
+      <div class="g2" style="margin-bottom:24px">
+        <div class="card" style="display:flex;align-items:center;gap:24px">
+          <div class="rec-ring-wrap">
+            <svg width="130" height="130" viewBox="0 0 130 130">
+              <circle cx="65" cy="65" r="54" fill="none" stroke="rgba(201,168,76,.1)" stroke-width="8"/>
+              <circle cx="65" cy="65" r="54" fill="none" stroke="var(--gold)" stroke-width="8" stroke-linecap="round" stroke-dasharray="339" id="rec-circle-2" stroke-dashoffset="339"/>
+            </svg>
+            <div class="rec-ring-inner">
+              <div class="rec-ring-num" id="rec-score-2" style="background:var(--gold-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">–</div>
+              <div class="rec-ring-lbl">Score</div>
+            </div>
+          </div>
+          <div style="flex:1">
+            <div style="font-family:var(--font-display);font-size:28px;font-weight:300;margin-bottom:8px" id="rec-label-2">–</div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);line-height:1.8" id="rec-desc-2"></div>
+            <div class="prog-wrap" style="margin-top:14px"><div class="prog-fill" id="rec-prog" style="width:0%;background:var(--gold)"></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Injury Risk</div>
+          <div style="font-family:var(--font-display);font-size:30px;font-weight:300;margin-bottom:8px" id="inj-label2">–</div>
+          <div class="risk-bar"><div class="risk-needle" id="inj-needle2" style="left:20%"></div></div>
+          <div style="display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:8px;color:var(--text-dim);margin-top:5px"><span>Low</span><span>Moderate</span><span>High</span></div>
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-top:12px;white-space:pre-line;line-height:1.8" id="inj-factors2"></div>
+        </div>
+      </div>
+      <div class="section-title">Training Load Metrics</div>
+      <div class="g4" style="margin-bottom:24px">
+        <div class="stat"><div class="stat-lbl">7-Day TSS</div><div class="stat-val" id="tss-7">0</div><div class="stat-unit">training stress</div></div>
+        <div class="stat"><div class="stat-lbl">Acute Load</div><div class="stat-val" id="atl">0</div><div class="stat-unit">ATL (7-day avg)</div></div>
+        <div class="stat"><div class="stat-lbl">Chronic Load</div><div class="stat-val" id="ctl">0</div><div class="stat-unit">CTL (28-day avg)</div></div>
+        <div class="stat"><div class="stat-lbl">Form (TSB)</div><div class="stat-val" id="tsb">0</div><div class="stat-unit">CTL minus ATL</div></div>
+      </div>
+      <div class="section-title">28-Day Load History</div>
+      <div class="card"><div class="chart-wrap-tall"><canvas id="load-chart"></canvas></div></div>
+    </div>
+
+    <!-- SLEEP & WELLNESS -->
+    <div id="page-sleep" class="pv">
+      <div class="page-header">
+        <div><div class="page-eyebrow">Recovery</div><div class="page-title">Sleep & Wellness</div></div>
+      </div>
+      <div class="g2" style="margin-bottom:24px">
+        <div class="card">
+          <div class="card-title">Log Sleep</div>
+          <div class="g2" style="margin-bottom:14px">
+            <div class="form-group"><label class="form-label">Date</label><input type="date" class="form-input" id="sleep-date"></div>
+            <div class="form-group"><label class="form-label">Hours Slept</label><input type="number" class="form-input" id="sleep-hours" placeholder="8.0" step="0.5" min="0" max="24"></div>
+          </div>
+          <div class="form-group" style="margin-bottom:14px">
+            <label class="form-label">Sleep Quality — <span id="sq-val" style="color:var(--gold)">7</span>/10</label>
+            <input type="range" id="sleep-quality" min="1" max="10" value="7" oninput="document.getElementById('sq-val').textContent=this.value" style="width:100%;accent-color:var(--gold);margin-top:8px">
+          </div>
+          <div class="form-group" style="margin-bottom:16px"><label class="form-label">Notes</label><input type="text" class="form-input" id="sleep-notes" placeholder="e.g. woke up twice, felt very rested..."></div>
+          <button class="btn-gold btn-sm" onclick="logSleep()">Log Sleep</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Log Wellness</div>
+          <div class="g2" style="margin-bottom:14px">
+            <div class="form-group"><label class="form-label">Activity</label>
+              <select class="form-select" id="wellness-type">
+                <option>Sauna</option><option>Ice Bath</option><option>Massage</option>
+                <option>Stretching</option><option>Yoga</option><option>Cold Shower</option>
+                <option>Foam Rolling</option><option>Physiotherapy</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Date</label><input type="date" class="form-input" id="wellness-date"></div>
+          </div>
+          <div class="g2" style="margin-bottom:14px">
+            <div class="form-group"><label class="form-label">Duration (min)</label><input type="number" class="form-input" id="wellness-dur" placeholder="20"></div>
+            <div class="form-group"><label class="form-label">Benefit (1–10)</label><input type="number" class="form-input" id="wellness-benefit" placeholder="8" min="1" max="10"></div>
+          </div>
+          <div class="form-group" style="margin-bottom:16px"><label class="form-label">Notes</label><input type="text" class="form-input" id="wellness-notes" placeholder="e.g. 15min at 90C, felt great after"></div>
+          <button class="btn-gold btn-sm" onclick="logWellness()">Log Wellness</button>
+        </div>
+      </div>
+      <div class="g2" style="margin-bottom:24px">
+        <div class="card">
+          <div class="card-title">Sleep History</div>
+          <div class="chart-wrap"><canvas id="sleep-chart"></canvas></div>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:8px">
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);letter-spacing:2px">7-NIGHT AVERAGE</div>
+          <div class="sleep-big" id="avg-sleep-hours" style="background:var(--gold-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">–</div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim)">hours per night</div>
+          <div style="margin-top:8px;font-family:var(--font-mono);font-size:11px">Quality: <span id="avg-sleep-qual" style="color:var(--gold)">–</span>/10</div>
+        </div>
+      </div>
+      <div class="section-title">Wellness Log</div>
+      <div class="card"><div id="wellness-log"></div></div>
+    </div>
+
+    <!-- RUNNING -->
+    <div id="page-running" class="pv">
+      <div class="page-header">
+        <div><div class="page-eyebrow">Discipline</div><div class="page-title gold">Running</div></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="pill gold">Marathon 3:54:00</span><span class="pill ok">VO₂ Max 58</span></div>
+      </div>
+      <div class="g4">
+        <div class="stat gold-accent"><div class="stat-lbl">Total KM</div><div class="stat-val" id="rn-total">0</div><div class="stat-unit">all time</div></div>
+        <div class="stat"><div class="stat-lbl">Best Pace</div><div class="stat-val" id="rn-pace">–</div><div class="stat-unit">min/km</div></div>
+        <div class="stat"><div class="stat-lbl">Total Runs</div><div class="stat-val" id="rn-count">0</div><div class="stat-unit">sessions</div></div>
+        <div class="stat"><div class="stat-lbl">VO₂ Max</div><div class="stat-val" id="rn-vo2">58</div><div class="stat-unit">mL/kg/min (Coros)</div></div>
+      </div>
+      <div class="section-title">Race Predictor</div>
+      <div class="card" style="margin-bottom:24px">
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-bottom:16px;letter-spacing:.5px">Based on marathon 3:54:00 — Riegel formula. Threshold: 4:12/km, HR 177 bpm.</div>
+        <div id="race-predictor"></div>
+      </div>
+      <div class="g3" style="margin-bottom:24px">
+        <div class="stat"><div class="stat-lbl">Threshold Pace</div><div class="stat-val">4:12</div><div class="stat-unit">min/km</div></div>
+        <div class="stat"><div class="stat-lbl">Threshold HR</div><div class="stat-val">177</div><div class="stat-unit">bpm</div></div>
+        <div class="stat"><div class="stat-lbl">Zone</div><div class="stat-val" style="font-size:32px">Z4</div><div class="stat-unit">lactate threshold</div></div>
+      </div>
+      <div class="section-title">Run History</div>
+      <div class="card"><div id="run-log"></div></div>
+    </div>
+
+    <!-- TENNIS -->
+    <div id="page-tennis" class="pv">
+      <div class="page-header"><div><div class="page-eyebrow">Discipline</div><div class="page-title" style="color:var(--tennis)">Tennis</div></div></div>
+      <div class="g4">
+        <div class="stat"><div class="stat-lbl">Matches</div><div class="stat-val" id="ten-total">0</div><div class="stat-unit">played</div></div>
+        <div class="stat"><div class="stat-lbl">Win Rate</div><div class="stat-val" id="ten-wr">–</div><div class="stat-unit">percent</div></div>
+        <div class="stat"><div class="stat-lbl">Wins</div><div class="stat-val" id="ten-wins">0</div></div>
+        <div class="stat"><div class="stat-lbl">Losses</div><div class="stat-val" id="ten-loss">0</div></div>
+      </div>
+      <div class="section-title">Match History</div>
+      <div class="card"><div id="ten-log"></div></div>
+    </div>
+
+    <!-- PADEL -->
+    <div id="page-padel" class="pv">
+      <div class="page-header"><div><div class="page-eyebrow">Discipline</div><div class="page-title" style="color:var(--padel)">Padel</div></div></div>
+      <div class="g4">
+        <div class="stat"><div class="stat-lbl">Matches</div><div class="stat-val" id="pad-total">0</div></div>
+        <div class="stat"><div class="stat-lbl">Win Rate</div><div class="stat-val" id="pad-wr">–</div><div class="stat-unit">percent</div></div>
+        <div class="stat"><div class="stat-lbl">Wins</div><div class="stat-val" id="pad-wins">0</div></div>
+        <div class="stat"><div class="stat-lbl">Losses</div><div class="stat-val" id="pad-loss">0</div></div>
+      </div>
+      <div class="section-title">Match History</div>
+      <div class="card"><div id="pad-log"></div></div>
+    </div>
+
+    <!-- GOLF -->
+    <div id="page-golf" class="pv">
+      <div class="page-header"><div><div class="page-eyebrow">Discipline</div><div class="page-title" style="color:var(--golf)">Golf</div></div></div>
+      <div class="g4">
+        <div class="stat"><div class="stat-lbl">Handicap</div><div class="stat-val" id="golf-hcp">–</div><div class="stat-unit">index</div></div>
+        <div class="stat"><div class="stat-lbl">Rounds</div><div class="stat-val" id="golf-rounds">0</div></div>
+        <div class="stat"><div class="stat-lbl">Best Score</div><div class="stat-val" id="golf-best">–</div><div class="stat-unit">gross</div></div>
+        <div class="stat"><div class="stat-lbl">Avg Putts</div><div class="stat-val" id="golf-putts">–</div><div class="stat-unit">per round</div></div>
+      </div>
+      <div class="section-title">Round History</div>
+      <div class="card"><div id="golf-log"></div></div>
+    </div>
+
+    <!-- GYM -->
+    <div id="page-gym" class="pv">
+      <div class="page-header"><div><div class="page-eyebrow">Discipline</div><div class="page-title" style="color:var(--gym)">Gym</div></div></div>
+      <div class="g4">
+        <div class="stat"><div class="stat-lbl">Sessions</div><div class="stat-val" id="gym-sessions">0</div></div>
+        <div class="stat"><div class="stat-lbl">Total Volume</div><div class="stat-val" id="gym-volume">0</div><div class="stat-unit">tonnes lifted</div></div>
+        <div class="stat"><div class="stat-lbl">Avg Duration</div><div class="stat-val" id="gym-avg-dur">–</div><div class="stat-unit">min</div></div>
+        <div class="stat"><div class="stat-lbl">PRs Logged</div><div class="stat-val" id="gym-prs">0</div></div>
+      </div>
+      <div class="section-title">Session History</div>
+      <div class="card"><div id="gym-log"></div></div>
+    </div>
+
+    <!-- SWIM -->
+    <div id="page-swim" class="pv">
+      <div class="page-header"><div><div class="page-eyebrow">Discipline</div><div class="page-title" style="color:var(--swim)">Swimming</div></div></div>
+      <div class="g4">
+        <div class="stat"><div class="stat-lbl">Total Distance</div><div class="stat-val" id="sw-total">0</div><div class="stat-unit">metres</div></div>
+        <div class="stat"><div class="stat-lbl">Sessions</div><div class="stat-val" id="sw-count">0</div></div>
+        <div class="stat"><div class="stat-lbl">Best 100m</div><div class="stat-val" id="sw-best">–</div><div class="stat-unit">min:sec / 100m</div></div>
+        <div class="stat"><div class="stat-lbl">Ironman Target</div><div class="stat-val" style="font-size:28px">3.8km</div><div class="stat-unit">open water</div></div>
+      </div>
+      <div class="section-title">Swim Log</div>
+      <div class="card"><div id="sw-log"></div></div>
+    </div>
+
+    <!-- BIKE -->
+    <div id="page-bike" class="pv">
+      <div class="page-header"><div><div class="page-eyebrow">Discipline</div><div class="page-title" style="color:var(--bike)">Cycling</div></div></div>
+      <div class="g4">
+        <div class="stat"><div class="stat-lbl">Total KM</div><div class="stat-val" id="bk-total">0</div></div>
+        <div class="stat"><div class="stat-lbl">Sessions</div><div class="stat-val" id="bk-count">0</div></div>
+        <div class="stat"><div class="stat-lbl">Avg Speed</div><div class="stat-val" id="bk-speed">–</div><div class="stat-unit">km/h</div></div>
+        <div class="stat"><div class="stat-lbl">Ironman Target</div><div class="stat-val" style="font-size:28px">180km</div><div class="stat-unit">road bike</div></div>
+      </div>
+      <div class="section-title">Ride Log</div>
+      <div class="card"><div id="bk-log"></div></div>
+    </div>
+
+    <!-- IRONMAN -->
+    <div id="page-ironman" class="pv">
+      <div class="page-header">
+        <div><div class="page-eyebrow">Goal</div><div class="page-title gold">Ironman</div></div>
+        <span class="pill tri">140.6 miles</span>
+      </div>
+      <div class="iron-card" style="margin-bottom:24px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px">
+          <div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);letter-spacing:2px;margin-bottom:8px">TARGET RACE</div>
+            <div style="font-family:var(--font-display);font-size:32px;font-weight:300;letter-spacing:1px" id="iron-race-name">Set your Ironman race</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap">
+            <div class="form-group"><label class="form-label">Race Name</label><input type="text" class="form-input" id="iron-name-input" placeholder="Ironman Barcelona" style="width:200px"></div>
+            <div class="form-group"><label class="form-label">Race Date</label><input type="date" class="form-input" id="iron-date-input" style="width:160px"></div>
+            <button class="btn-gold btn-sm" style="margin-bottom:4px" onclick="setIronman()">Set Race</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:32px;margin-top:24px">
+          <div style="text-align:center">
+            <div style="font-family:var(--font-display);font-size:56px;font-weight:300;line-height:1;color:var(--tri)" id="iron-days">–</div>
+            <div style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim);letter-spacing:3px;margin-top:4px">DAYS</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-family:var(--font-display);font-size:56px;font-weight:300;line-height:1;color:var(--tri)" id="iron-weeks">–</div>
+            <div style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim);letter-spacing:3px;margin-top:4px">WEEKS</div>
+          </div>
+        </div>
+      </div>
+      <div class="section-title">Weekly Discipline Progress</div>
+      <div class="g3" style="margin-bottom:24px">
+        <div class="stat">
+          <div class="stat-lbl">Swim (3.8km)</div>
+          <div style="font-family:var(--font-display);font-size:32px;font-weight:300" id="iron-sw-prog">0km</div>
+          <div class="prog-wrap"><div class="prog-fill" id="iron-sw-bar" style="width:0%;background:var(--swim)"></div></div>
+          <div class="stat-unit" style="margin-top:6px" id="iron-sw-pct">0% of weekly target</div>
+        </div>
+        <div class="stat">
+          <div class="stat-lbl">Bike (180km)</div>
+          <div style="font-family:var(--font-display);font-size:32px;font-weight:300" id="iron-bk-prog">0km</div>
+          <div class="prog-wrap"><div class="prog-fill" id="iron-bk-bar" style="width:0%;background:var(--bike)"></div></div>
+          <div class="stat-unit" style="margin-top:6px" id="iron-bk-pct">0% of weekly target</div>
+        </div>
+        <div class="stat">
+          <div class="stat-lbl">Run (42.2km)</div>
+          <div style="font-family:var(--font-display);font-size:32px;font-weight:300" id="iron-rn-prog">0km</div>
+          <div class="prog-wrap"><div class="prog-fill" id="iron-rn-bar" style="width:0%;background:var(--run)"></div></div>
+          <div class="stat-unit" style="margin-top:6px" id="iron-rn-pct">0% of weekly target</div>
+        </div>
+      </div>
+      <div class="section-title">20-Week Training Plan</div>
+      <div class="card" style="overflow-x:auto">
+        <div style="display:grid;grid-template-columns:52px repeat(7,1fr);gap:4px;margin-bottom:8px;min-width:600px">
+          <div></div>
+          <div style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim);text-align:center;letter-spacing:1px">MON</div>
+          <div style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim);text-align:center;letter-spacing:1px">TUE</div>
+          <div style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim);text-align:center;letter-spacing:1px">WED</div>
+          <div style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim);text-align:center;letter-spacing:1px">THU</div>
+          <div style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim);text-align:center;letter-spacing:1px">FRI</div>
+          <div style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim);text-align:center;letter-spacing:1px">SAT</div>
+          <div style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim);text-align:center;letter-spacing:1px">SUN</div>
+        </div>
+        <div id="ironman-plan" style="min-width:600px"></div>
+        <div style="display:flex;gap:14px;margin-top:14px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:8px;color:var(--text-dim)"><div style="width:10px;height:10px;border-radius:2px;background:rgba(56,217,245,.2)"></div>Swim</div>
+          <div style="display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:8px;color:var(--text-dim)"><div style="width:10px;height:10px;border-radius:2px;background:rgba(251,146,60,.2)"></div>Bike</div>
+          <div style="display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:8px;color:var(--text-dim)"><div style="width:10px;height:10px;border-radius:2px;background:rgba(74,222,158,.2)"></div>Run</div>
+          <div style="display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:8px;color:var(--text-dim)"><div style="width:10px;height:10px;border-radius:2px;background:rgba(253,224,71,.15)"></div>Tennis / Padel</div>
+          <div style="display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:8px;color:var(--text-dim)"><div style="width:10px;height:10px;border-radius:2px;background:rgba(255,107,91,.15)"></div>Gym</div>
+          <div style="display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:8px;color:var(--text-dim)"><div style="width:10px;height:10px;border-radius:2px;background:var(--surface3)"></div>Rest</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANALYTICS -->
+    <div id="page-analytics" class="pv">
+      <div class="page-header"><div><div class="page-eyebrow">Insights</div><div class="page-title">Analytics</div></div></div>
+      <div class="section-title">Performance Timeline — 12 Weeks</div>
+      <div class="card" style="margin-bottom:24px"><div class="chart-wrap-tall"><canvas id="timeline-chart"></canvas></div></div>
+      <div class="g2" style="margin-bottom:24px">
+        <div class="card"><div class="card-title">Weekly Volume</div><div class="chart-wrap"><canvas id="volume-chart"></canvas></div></div>
+        <div class="card"><div class="card-title">Calorie Burn Trend</div><div class="chart-wrap"><canvas id="cal-chart"></canvas></div></div>
+      </div>
+      <div class="section-title">Improvement Timeline</div>
+      <div class="card"><div class="timeline" id="improvement-timeline"><div style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);padding:10px">Log activities to build your timeline.</div></div></div>
+    </div>
+
+    <!-- PR LEADERBOARD -->
+    <div id="page-leaderboard" class="pv">
+      <div class="page-header"><div><div class="page-eyebrow">Records</div><div class="page-title">PR Leaderboard</div></div></div>
+      <div class="g2" style="margin-bottom:24px">
+        <div class="card"><div class="card-title">Running PRs</div><div id="pr-run"></div></div>
+        <div class="card"><div class="card-title">Swimming PRs</div><div id="pr-swim"></div></div>
+      </div>
+      <div class="g2">
+        <div class="card"><div class="card-title">Cycling PRs</div><div id="pr-bike"></div></div>
+        <div class="card"><div class="card-title">Gym PRs</div><div id="pr-gym-lb"></div></div>
+      </div>
+    </div>
+
+    <!-- FRIENDS LEADERBOARD -->
+    <div id="page-friends" class="pv">
+      <div class="page-header"><div><div class="page-eyebrow">Community</div><div class="page-title">Friends</div></div></div>
+
+      <div class="g2" style="margin-bottom:24px">
+        <div class="card card-gold">
+          <div class="card-title">Your Athlete Code</div>
+          <div class="friend-code-lbl">Share this code with friends to connect</div>
+          <div class="friend-code-box">
+            <div>
+              <div class="friend-code" id="my-friend-code">–</div>
+            </div>
+            <button class="btn-gold btn-sm" onclick="copyFriendCode()">Copy Code</button>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-top:10px;line-height:1.7">Your code is unique to your account. Friends enter it to see your stats on their leaderboard.</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Add a Friend</div>
+          <div class="form-group" style="margin-bottom:14px">
+            <label class="form-label">Enter Friend's Code</label>
+            <input type="text" class="form-input" id="friend-code-input" placeholder="e.g. APX-4829" style="letter-spacing:2px;text-transform:uppercase">
+          </div>
+          <div class="form-group" style="margin-bottom:16px">
+            <label class="form-label">Nickname (optional)</label>
+            <input type="text" class="form-input" id="friend-nick" placeholder="e.g. Marco">
+          </div>
+          <button class="btn-gold btn-sm" onclick="addFriend()">Add Friend</button>
+        </div>
+      </div>
+
+      <div class="section-title">Weekly KM Leaderboard</div>
+      <div class="card" style="margin-bottom:24px"><div id="friends-lb-km"></div></div>
+
+      <div class="section-title">Total Activities Leaderboard</div>
+      <div class="card" style="margin-bottom:24px"><div id="friends-lb-acts"></div></div>
+
+      <div class="section-title">Connected Friends</div>
+      <div class="card"><div id="friends-list"></div></div>
+    </div>
+
+    <!-- BODY METRICS -->
+    <div id="page-body" class="pv">
+      <div class="page-header"><div><div class="page-eyebrow">Profile</div><div class="page-title">Body Metrics</div></div></div>
+      <div class="g3" style="margin-bottom:24px">
+        <div class="stat gold-accent"><div class="stat-lbl">Height</div><div class="stat-val" id="bm-height">192</div><div class="stat-unit">centimetres</div></div>
+        <div class="stat"><div class="stat-lbl">Weight</div><div class="stat-val" id="bm-weight">82</div><div class="stat-unit">kilograms</div></div>
+        <div class="stat"><div class="stat-lbl">BMI</div><div class="stat-val" id="bm-bmi">22.2</div><div class="stat-unit" style="color:var(--ok)">Healthy</div></div>
+        <div class="stat"><div class="stat-lbl">Body Fat (est.)</div><div class="stat-val" id="bm-fat">–</div><div class="stat-unit">percent</div></div>
+        <div class="stat"><div class="stat-lbl">VO₂ Max</div><div class="stat-val" id="bm-vo2">58</div><div class="stat-unit">mL/kg/min</div></div>
+        <div class="stat"><div class="stat-lbl">Resting Cal</div><div class="stat-val" id="bm-bmr">–</div><div class="stat-unit">kcal / day</div></div>
+      </div>
+      <div class="card" style="margin-bottom:24px">
+        <div class="card-title">Edit Profile</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px">
+          <div class="form-group"><label class="form-label">Name</label><input type="text" class="form-input" id="p-name"></div>
+          <div class="form-group"><label class="form-label">Age</label><input type="number" class="form-input" id="p-age"></div>
+          <div class="form-group"><label class="form-label">Height (cm)</label><input type="number" class="form-input" id="p-height"></div>
+          <div class="form-group"><label class="form-label">Weight (kg)</label><input type="number" class="form-input" id="p-weight" step="0.1"></div>
+          <div class="form-group"><label class="form-label">Sex</label><select class="form-select" id="p-sex"><option value="M">Male</option><option value="F">Female</option></select></div>
+          <div class="form-group"><label class="form-label">VO₂ Max</label><input type="number" class="form-input" id="p-vo2"></div>
+        </div>
+        <button class="btn-gold btn-sm" onclick="saveProfile()">Save Profile</button>
+      </div>
+      <div class="g2">
+        <div class="card"><div class="card-title">Weight History</div><div class="chart-wrap"><canvas id="weight-chart"></canvas></div></div>
+        <div class="card">
+          <div class="card-title">Log Weight</div>
+          <div class="g2" style="margin-bottom:14px">
+            <div class="form-group"><label class="form-label">Weight (kg)</label><input type="number" class="form-input" id="w-kg" placeholder="82.0" step="0.1"></div>
+            <div class="form-group"><label class="form-label">Date</label><input type="date" class="form-input" id="w-date"></div>
+          </div>
+          <button class="btn-gold btn-sm" onclick="logWeight()">Log Weight</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- PROFILE MODAL -->
+<div class="modal" id="profile-modal">
+  <div class="modal-box">
+    <div class="modal-title">Edit Profile</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+      <div class="form-group"><label class="form-label">Name</label><input type="text" class="form-input" id="m-name"></div>
+      <div class="form-group"><label class="form-label">Age</label><input type="number" class="form-input" id="m-age"></div>
+      <div class="form-group"><label class="form-label">Height (cm)</label><input type="number" class="form-input" id="m-height"></div>
+      <div class="form-group"><label class="form-label">Weight (kg)</label><input type="number" class="form-input" id="m-weight" step="0.1"></div>
+      <div class="form-group"><label class="form-label">Sex</label><select class="form-select" id="m-sex"><option value="M">Male</option><option value="F">Female</option></select></div>
+      <div class="form-group"><label class="form-label">VO₂ Max</label><input type="number" class="form-input" id="m-vo2"></div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn-gold btn-sm" onclick="saveProfileModal()">Save</button>
+      <button class="btn-ghost" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================
+// STORAGE — PER-USER KEYS
+// ============================
+var ACCOUNTS_KEY = 'apex_accounts';
+var SESSION_KEY = 'apex_session';
+
+function getAccounts() {
+  try { return JSON.parse(localStorage.getItem(ACCOUNTS_KEY) || '{}'); } catch(e) { return {}; }
+}
+
+function saveAccounts(accounts) {
+  localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
+}
+
+function getCurrentUser() {
+  try { return localStorage.getItem(SESSION_KEY) || null; } catch(e) { return null; }
+}
+
+function setCurrentUser(username) {
+  localStorage.setItem(SESSION_KEY, username);
+}
+
+function clearSession() {
+  localStorage.removeItem(SESSION_KEY);
+}
+
+function getUserData(username) {
+  var accounts = getAccounts();
+  return accounts[username] ? accounts[username].data : null;
+}
+
+function saveUserData(username, data) {
+  var accounts = getAccounts();
+  if(accounts[username]) {
+    accounts[username].data = data;
+    saveAccounts(accounts);
+  }
+}
+
+// Generate a unique friend code for a user
+function generateFriendCode(username) {
+  var hash = 0;
+  for(var i = 0; i < username.length; i++) {
+    hash = ((hash << 5) - hash) + username.charCodeAt(i);
+    hash |= 0;
+  }
+  var code = Math.abs(hash % 9000) + 1000;
+  return 'APX-' + code;
+}
+
+// ============================
+// STATE
+// ============================
+var CURRENT_USER = null;
+var S = null;
+
+var DEFAULT_DATA = {
+  profile: {name:'Athlete',age:28,height:192,weight:82,sex:'M',vo2:58},
+  activities: [],
+  sleepLog: [],
+  wellnessLog: [],
+  weightLog: [],
+  ironman: null,
+  friends: []
+};
+
+function save() {
+  if(CURRENT_USER && S) saveUserData(CURRENT_USER, S);
+}
+
+// ============================
+// AUTH
+// ============================
+function switchAuthTab(tab) {
+  document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+  document.getElementById('form-login').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('form-register').style.display = tab === 'register' ? 'block' : 'none';
+  hideAuthError();
+}
+
+function showAuthError(msg) {
+  var e = document.getElementById('auth-error');
+  e.textContent = msg; e.style.display = 'block';
+}
+
+function hideAuthError() {
+  document.getElementById('auth-error').style.display = 'none';
+}
+
+function doLogin() {
+  var username = document.getElementById('login-user').value.trim().toLowerCase();
+  var password = document.getElementById('login-pass').value;
+  if(!username || !password) return showAuthError('Please enter username and password.');
+  var accounts = getAccounts();
+  if(!accounts[username]) return showAuthError('Account not found. Please check your username.');
+  if(accounts[username].password !== btoa(password)) return showAuthError('Incorrect password.');
+  loginSuccess(username);
+}
+
+function doRegister() {
+  var name = document.getElementById('reg-name').value.trim();
+  var username = document.getElementById('reg-user').value.trim().toLowerCase();
+  var password = document.getElementById('reg-pass').value;
+  var age = parseInt(document.getElementById('reg-age').value) || 28;
+  var sex = document.getElementById('reg-sex').value;
+  var height = parseFloat(document.getElementById('reg-height').value) || 175;
+  var weight = parseFloat(document.getElementById('reg-weight').value) || 75;
+  var vo2 = parseFloat(document.getElementById('reg-vo2').value) || 45;
+  if(!name) return showAuthError('Please enter your name.');
+  if(!username || username.length < 3) return showAuthError('Username must be at least 3 characters.');
+  if(!password || password.length < 4) return showAuthError('Password must be at least 4 characters.');
+  var accounts = getAccounts();
+  if(accounts[username]) return showAuthError('Username already taken. Please choose another.');
+  var userData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+  userData.profile = {name: name, age: age, height: height, weight: weight, sex: sex, vo2: vo2 || 45};
+  accounts[username] = {
+    password: btoa(password),
+    createdAt: new Date().toISOString(),
+    data: userData
+  };
+  saveAccounts(accounts);
+  loginSuccess(username);
+}
+
+function loginSuccess(username) {
+  CURRENT_USER = username;
+  setCurrentUser(username);
+  var accounts = getAccounts();
+  S = accounts[username].data;
+  // Ensure all keys exist (for old accounts)
+  if(!S.friends) S.friends = [];
+  if(!S.wellnessLog) S.wellnessLog = [];
+  if(!S.sleepLog) S.sleepLog = [];
+  if(!S.weightLog) S.weightLog = [];
+  hideAuthScreen();
+  initApp();
+}
+
+function doLogout() {
+  clearSession();
+  CURRENT_USER = null; S = null;
+  showAuthScreen();
+}
+
+function hideAuthScreen() {
+  document.getElementById('auth-wrap').style.display = 'none';
+  document.getElementById('main-app').classList.add('visible');
+}
+
+function showAuthScreen() {
+  document.getElementById('auth-wrap').style.display = 'flex';
+  document.getElementById('main-app').classList.remove('visible');
+}
+
+function initApp() {
+  var today = isoToday();
+  ['log-date','sleep-date','wellness-date','w-date'].forEach(function(id) {
+    var e = document.getElementById(id); if(e) e.value = today;
+  });
+  var dd = document.getElementById('dash-date');
+  if(dd) dd.textContent = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).toUpperCase();
+  loadProfileToForms();
+  buildHeatmap();
+  buildIronmanPlan();
+  buildRacePredictor();
+  if(S.ironman) { setText('iron-race-name', S.ironman.name); updateIronmanCountdown(); }
+  renderAll();
+  updateFriendCode();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var modal = document.getElementById('profile-modal');
+  if(modal) modal.addEventListener('click', function(e) { if(e.target === this) closeModal(); });
+  // Check for existing session
+  var existing = getCurrentUser();
+  if(existing) {
+    var accounts = getAccounts();
+    if(accounts[existing]) { loginSuccess(existing); return; }
+  }
+  showAuthScreen();
+  // Allow Enter key on login
+  document.getElementById('login-pass').addEventListener('keydown', function(e) { if(e.key === 'Enter') doLogin(); });
+  document.getElementById('login-user').addEventListener('keydown', function(e) { if(e.key === 'Enter') doLogin(); });
+});
+
+// ============================
+// UTILITIES
+// ============================
+function fmtPace(p) {
+  if(!p || isNaN(p)) return '--';
+  var m = Math.floor(p), s = Math.round((p - m) * 60);
+  return m + ':' + (s < 10 ? '0' : '') + s;
+}
+
+function fmtTime(min) {
+  var h = Math.floor(min / 60), m = Math.floor(min % 60), s = Math.round((min % 1) * 60);
+  if(h > 0) return h + ':' + (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+  return m + ':' + (s < 10 ? '0' : '') + s;
+}
+
+function gv(id) { var e = document.getElementById(id); return e ? e.value : ''; }
+function el(id) { return document.getElementById(id); }
+function setText(id, val) { var e = el(id); if(e) e.textContent = val; }
+
+function toast(msg) {
+  var t = el('toast'); if(!t) return;
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2600);
+}
+
+function isoToday() { return new Date().toISOString().split('T')[0]; }
+
+function getWeekStart() {
+  var d = new Date(), day = d.getDay(), diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  d.setDate(diff); return d.toISOString().split('T')[0];
+}
+
+function getWeekActivities() {
+  var ws = getWeekStart();
+  return S.activities.filter(function(a) { return a.date >= ws; });
+}
+
+function getTodayActivities() {
+  var today = isoToday();
+  return S.activities.filter(function(a) { return a.date === today; });
+}
+
+// ============================
+// NAVIGATION
+// ============================
+function nav(page, elem) {
+  document.querySelectorAll('.pv').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.ni').forEach(function(n) { n.classList.remove('active'); });
+  var pv = el('page-' + page); if(pv) pv.classList.add('active');
+  if(elem) elem.classList.add('active');
+  renderAll();
+  if(page === 'analytics') setTimeout(buildCharts, 120);
+  if(page === 'recovery') setTimeout(buildLoadChart, 120);
+  if(page === 'sleep') setTimeout(buildSleepChart, 120);
+  if(page === 'body') setTimeout(buildWeightChart, 120);
+  if(page === 'friends') renderFriendsPage();
+}
+
+// ============================
+// PROFILE
+// ============================
+function loadProfileToForms() {
+  var p = S.profile;
+  ['p','m'].forEach(function(prefix) {
+    var map = {name: p.name||'', age: p.age||'', height: p.height||'', weight: p.weight||'', vo2: p.vo2||''};
+    Object.keys(map).forEach(function(k) { var e = el(prefix+'-'+k); if(e) e.value = map[k]; });
+    var se = el(prefix+'-sex'); if(se) se.value = p.sex || 'M';
+  });
+  updateSidebarProfile();
+}
+
+function saveProfile() {
+  S.profile = {
+    name: gv('p-name') || S.profile.name,
+    age: parseFloat(gv('p-age')) || S.profile.age,
+    height: parseFloat(gv('p-height')) || S.profile.height,
+    weight: parseFloat(gv('p-weight')) || S.profile.weight,
+    sex: (el('p-sex') && el('p-sex').value) || S.profile.sex,
+    vo2: parseFloat(gv('p-vo2')) || S.profile.vo2
+  };
+  save(); loadProfileToForms(); renderAll(); toast('Profile saved');
+}
+
+function openProfileModal() {
+  var p = S.profile;
+  var map = {name:p.name||'',age:p.age||'',height:p.height||'',weight:p.weight||'',vo2:p.vo2||''};
+  Object.keys(map).forEach(function(k) { var e = el('m-'+k); if(e) e.value = map[k]; });
+  var se = el('m-sex'); if(se) se.value = p.sex || 'M';
+  var modal = el('profile-modal'); if(modal) modal.classList.add('open');
+}
+
+function saveProfileModal() {
+  S.profile = {
+    name: gv('m-name') || S.profile.name,
+    age: parseFloat(gv('m-age')) || S.profile.age,
+    height: parseFloat(gv('m-height')) || S.profile.height,
+    weight: parseFloat(gv('m-weight')) || S.profile.weight,
+    sex: (el('m-sex') && el('m-sex').value) || S.profile.sex,
+    vo2: parseFloat(gv('m-vo2')) || S.profile.vo2
+  };
+  save(); loadProfileToForms(); closeModal(); renderAll(); toast('Profile updated');
+}
+
+function closeModal() { var m = el('profile-modal'); if(m) m.classList.remove('open'); }
+
+function updateSidebarProfile() {
+  var p = S.profile;
+  var bmi = (p.weight / Math.pow(p.height / 100, 2)).toFixed(1);
+  setText('sb-name', p.name || 'Athlete');
+  setText('sb-stats', p.height + 'cm  ·  ' + p.weight + 'kg  ·  BMI ' + bmi);
+  var vb = el('sb-vo2-badge'); if(vb) vb.textContent = 'VO2 ' + (p.vo2 || 58);
+}
+
+// ============================
+// LOG FORM
+// ============================
+var SPORT_FIELDS = ['run','tennis','padel','golf','gym','swim','bike'];
+
+function updateLogFields() {
+  var sport = gv('log-sport');
+  SPORT_FIELDS.forEach(function(f) {
+    var e = el('fields-' + f); if(e) e.style.display = f === sport ? 'block' : 'none';
+  });
+}
+
+function clearLogForm() {
+  document.querySelectorAll('#page-log .form-input, #page-log .form-select').forEach(function(e) {
+    if(e.type === 'date') e.value = isoToday();
+    else if(e.tagName === 'SELECT') e.selectedIndex = 0;
+    else e.value = '';
+  });
+}
+
+// ============================
+// SAVE ACTIVITY
+// ============================
+function saveActivity() {
+  var sport = gv('log-sport'), date = gv('log-date'), notes = gv('log-notes');
+  if(!date) return toast('Select a date');
+  var entry = {sport:sport, date:date, notes:notes, id:Date.now()};
+
+  if(sport === 'run') {
+    var dist = parseFloat(gv('r-dist')), dur = parseFloat(gv('r-dur')) || 0;
+    if(!dist) return toast('Enter distance');
+    var hr = parseInt(gv('r-hr')) || 0, rpe = parseInt(gv('r-rpe')) || 5;
+    var thHR = S.profile.vo2 > 55 ? 177 : 170;
+    var intF = hr ? Math.pow(hr / thHR, 2) : rpe / 10;
+    entry.dist = dist; entry.dur = dur; entry.hr = hr;
+    entry.elev = parseInt(gv('r-elev')) || 0;
+    entry.type = gv('r-type'); entry.rpe = rpe;
+    entry.pace = (dur && dist) ? dur / dist : null;
+    entry.tss = Math.round(dur * intF * 0.8);
+    entry.cals = Math.round(dist * (S.profile.weight || 82) * 1.036);
+  } else if(sport === 'tennis') {
+    var dur = parseInt(gv('ten-dur')) || 60;
+    entry.opponent = gv('ten-opp') || 'Unknown'; entry.result = gv('ten-res') || 'W';
+    entry.score = gv('ten-score'); entry.surface = gv('ten-surf') || 'Clay';
+    entry.dur = dur; entry.quality = parseInt(gv('ten-qual')) || 7;
+    entry.tss = dur * 0.6; entry.cals = Math.round(dur * 8);
+  } else if(sport === 'padel') {
+    var dur = parseInt(gv('pad-dur')) || 60;
+    entry.partner = gv('pad-partner') || 'Unknown'; entry.result = gv('pad-res') || 'W';
+    entry.score = gv('pad-score'); entry.venue = gv('pad-venue') || 'Indoor';
+    entry.dur = dur; entry.intensity = parseInt(gv('pad-int')) || 7;
+    entry.tss = dur * 0.65; entry.cals = Math.round(dur * 9);
+  } else if(sport === 'golf') {
+    var score = parseInt(gv('g-score')), par = parseInt(gv('g-par')) || 72;
+    if(!score) return toast('Enter score');
+    entry.course = gv('g-course') || 'Unknown'; entry.score = score; entry.par = par;
+    entry.fir = parseInt(gv('g-fir')) || 0; entry.gir = parseInt(gv('g-gir')) || 0;
+    entry.putts = parseInt(gv('g-putts')) || 0;
+    entry.tss = 50; entry.cals = 800; entry.dur = 240;
+  } else if(sport === 'gym') {
+    var dur = parseInt(gv('gym-dur')) || 60;
+    entry.type = gv('gym-type') || 'Full Body'; entry.dur = dur;
+    entry.volume = parseInt(gv('gym-vol')) || 0; entry.pr = gv('gym-pr');
+    entry.rpe = parseInt(gv('gym-rpe')) || 7;
+    entry.tss = dur * 0.5; entry.cals = Math.round(dur * 7);
+  } else if(sport === 'swim') {
+    var dist = parseInt(gv('sw-dist')) || 0, dur = parseInt(gv('sw-dur')) || 0;
+    entry.dist = dist; entry.dur = dur; entry.type = gv('sw-type') || 'Pool';
+    entry.stroke = gv('sw-stroke') || 'Freestyle'; entry.hr = parseInt(gv('sw-hr')) || 0;
+    entry.rpe = parseInt(gv('sw-rpe')) || 6;
+    entry.pace100 = (dist && dur) ? (dur / dist * 100) : null;
+    entry.tss = dur * 0.8; entry.cals = Math.round(dur * 9);
+  } else if(sport === 'bike') {
+    var dist = parseFloat(gv('bk-dist')) || 0, dur = parseInt(gv('bk-dur')) || 0;
+    entry.dist = dist; entry.dur = dur; entry.hr = parseInt(gv('bk-hr')) || 0;
+    entry.elev = parseInt(gv('bk-elev')) || 0; entry.type = gv('bk-type') || 'Road';
+    entry.rpe = parseInt(gv('bk-rpe')) || 6;
+    entry.speed = (dist && dur) ? (dist / (dur / 60)).toFixed(1) : 0;
+    entry.tss = dur * 0.7; entry.cals = Math.round(dur * 11);
+  }
+
+  S.activities.unshift(entry);
+  save(); clearLogForm(); renderAll(); buildHeatmap(); toast('Activity saved');
+}
+
+// ============================
+// SLEEP & WELLNESS
+// ============================
+function logSleep() {
+  var date = gv('sleep-date'), hours = parseFloat(gv('sleep-hours'));
+  var qualEl = el('sleep-quality'), quality = qualEl ? parseInt(qualEl.value) : 7;
+  var notes = gv('sleep-notes');
+  if(!date || !hours) return toast('Enter date and hours');
+  S.sleepLog.unshift({date:date, hours:hours, quality:quality, notes:notes, id:Date.now()});
+  save(); renderSleepPage(); buildSleepChart(); toast('Sleep logged');
+  var sh = el('sleep-hours'); if(sh) sh.value = '';
+}
+
+function logWellness() {
+  var type = gv('wellness-type'), date = gv('wellness-date');
+  var dur = parseInt(gv('wellness-dur')) || 20, benefit = parseInt(gv('wellness-benefit')) || 7;
+  var notes = gv('wellness-notes');
+  if(!date) return toast('Select a date');
+  S.wellnessLog.unshift({type:type, date:date, dur:dur, benefit:benefit, notes:notes, id:Date.now()});
+  save(); renderSleepPage(); toast('Wellness logged');
+}
+
+function renderSleepPage() {
+  var last7 = S.sleepLog.slice(0, 7);
+  var avgH = last7.length ? (last7.reduce(function(a,s){return a+s.hours;},0)/last7.length).toFixed(1) : '--';
+  var avgQ = last7.length ? (last7.reduce(function(a,s){return a+s.quality;},0)/last7.length).toFixed(1) : '--';
+  setText('avg-sleep-hours', avgH); setText('avg-sleep-qual', avgQ);
+  var wl = el('wellness-log'); if(!wl) return;
+  wl.innerHTML = '';
+  if(!S.wellnessLog.length) {
+    var d = document.createElement('div');
+    d.style.cssText = 'font-family:var(--font-mono);font-size:10px;color:var(--text-dim);padding:16px;text-align:center';
+    d.textContent = 'No wellness entries yet.'; wl.appendChild(d); return;
+  }
+  var list = document.createElement('div'); list.className = 'log-list';
+  S.wellnessLog.slice(0,10).forEach(function(w) {
+    var row = buildSimpleRow('🧖', w.type, w.date + ' - ' + w.dur + 'min - Benefit ' + w.benefit + '/10' + (w.notes ? ' - ' + w.notes : ''), w.dur + 'min');
+    list.appendChild(row);
+  });
+  wl.appendChild(list);
+}
+
+function logWeight() {
+  var kg = parseFloat(gv('w-kg')), date = gv('w-date');
+  if(!kg || !date) return toast('Enter weight and date');
+  S.weightLog.unshift({kg:kg, date:date});
+  S.profile.weight = kg;
+  save(); renderAll(); buildWeightChart(); toast('Weight logged');
+}
+
+// ============================
+// CALCULATIONS
+// ============================
+function getBMR() {
+  var p = S.profile, w = p.weight||82, h = p.height||192, a = p.age||28;
+  if(p.sex === 'M') return Math.round(10*w + 6.25*h - 5*a + 5);
+  return Math.round(10*w + 6.25*h - 5*a - 161);
+}
+
+function getBodyFat() {
+  var p = S.profile, bmi = (p.weight||82) / Math.pow((p.height||192)/100, 2), age = p.age||28;
+  if(p.sex === 'M') return Math.max(5, Math.round(1.20*bmi + 0.23*age - 16.2)).toFixed(1);
+  return Math.max(10, Math.round(1.20*bmi + 0.23*age - 5.4)).toFixed(1);
+}
+
+function calcTrainingLoad() {
+  var now = new Date();
+  var d7 = new Date(now); d7.setDate(d7.getDate()-7); var d7s = d7.toISOString().split('T')[0];
+  var d28 = new Date(now); d28.setDate(d28.getDate()-28); var d28s = d28.toISOString().split('T')[0];
+  var week = S.activities.filter(function(a){return a.date>=d7s;});
+  var month = S.activities.filter(function(a){return a.date>=d28s;});
+  var atl = week.reduce(function(s,a){return s+(a.tss||0);},0) / 7;
+  var ctl = month.reduce(function(s,a){return s+(a.tss||0);},0) / 28;
+  var tss7 = week.reduce(function(s,a){return s+(a.tss||0);},0);
+  return {atl:Math.round(atl), ctl:Math.round(ctl), tsb:Math.round(ctl-atl), tss7:Math.round(tss7)};
+}
+
+function calcRecoveryScore(load) {
+  var base = 50 + load.tsb * 1.2;
+  var sleepBonus = S.sleepLog.length ? (S.sleepLog[0].quality - 5) * 3 : 0;
+  var wellBonus = S.wellnessLog.length && S.wellnessLog[0].date === isoToday() ? 5 : 0;
+  return Math.min(100, Math.max(1, Math.round(base + sleepBonus + wellBonus)));
+}
+
+function calcInjuryRisk(load) {
+  var ratio = load.ctl > 0 ? load.atl / load.ctl : 1;
+  var risk = (ratio - 1) * 60 + 20;
+  if(getWeekActivities().length >= 7) risk += 15;
+  if(getWeekActivities().length <= 2) risk -= 10;
+  return Math.min(95, Math.max(5, Math.round(risk)));
+}
+
+function calcReadiness(recScore, load) {
+  if(load.atl < 10 && load.tss7 < 20) return {label:'Undertrained', key:'under', color:'var(--danger)'};
+  if(recScore >= 75) return {label:'Ready to Perform', key:'ready', color:'var(--ok)'};
+  if(recScore >= 50) return {label:'Moderate', key:'mod', color:'var(--warn)'};
+  return {label:'Overtrained', key:'over', color:'var(--danger)'};
+}
+
+function calcPerformanceAge() {
+  var vo2 = S.profile.vo2 || 58;
+  return Math.max(18, Math.round(25 + (70 - vo2) * 1.2 - 3));
+}
+
+function calcStreak() {
+  var unique = S.activities.map(function(a){return a.date;}).filter(function(v,i,a){return a.indexOf(v)===i;}).sort(function(a,b){return b.localeCompare(a);});
+  if(!unique.length) return 0;
+  var streak = 0, check = new Date();
+  for(var i = 0; i < unique.length; i++) {
+    var cs = check.toISOString().split('T')[0];
+    if(unique[i] === cs) { streak++; check.setDate(check.getDate()-1); }
+    else if(unique[i] < cs) break;
+  }
+  return streak;
+}
+
+function getSmartRec(recScore, load) {
+  var daysSinceRun = 999;
+  var runs = S.activities.filter(function(a){return a.sport==='run';});
+  if(runs.length) daysSinceRun = Math.floor((new Date(isoToday()) - new Date(runs[0].date)) / 86400000);
+  if(recScore >= 80) {
+    if(daysSinceRun >= 2) return {title:'Tempo Run — 10km at 4:12/km', detail:'Recovery excellent (' + recScore + '%). Push a quality session. Target HR: 165-177 bpm. Warm up 10min, 5x1km at threshold, cool down 10min.'};
+    return {title:'Strength Session — Push or Legs', detail:'Running load is moderate. A gym session complements your training. Focus on compound lifts: squats, deadlifts, lunges. 3-4 sets, controlled weight.'};
+  }
+  if(recScore >= 60) return {title:'Easy Run — 8-10km comfortable', detail:'Recovery at ' + recScore + '%. Keep HR below 145 bpm (approx 5:00-5:20/km). Build aerobic base without adding training stress.'};
+  if(recScore >= 40) return {title:'Active Recovery — Stretching / Mobility', detail:'Training load is high (7d TSS: ' + load.tss7 + '). Focus on mobility, foam rolling, and a short walk. A sauna session will accelerate recovery.'};
+  return {title:'Full Rest Day', detail:'Recovery score ' + recScore + '% — your body requires rest. Prioritise 8+ hours sleep, hydration and quality nutrition today.'};
+}
+
+// ============================
+// RENDER ALL
+// ============================
+function renderAll() {
+  if(!S) return;
+  updateSidebarProfile();
+  var p = S.profile;
+  var bmi = (p.weight / Math.pow(p.height/100, 2)).toFixed(1);
+  var bmr = getBMR(), fat = getBodyFat();
+  setText('bm-height', p.height); setText('bm-weight', p.weight);
+  setText('bm-bmi', bmi); setText('bm-fat', fat);
+  setText('bm-vo2', p.vo2); setText('bm-bmr', bmr.toLocaleString());
+
+  var load = calcTrainingLoad();
+  var recScore = calcRecoveryScore(load);
+  var injRisk = calcInjuryRisk(load);
+  var readiness = calcReadiness(recScore, load);
+  var perfAge = calcPerformanceAge();
+  var rec = getSmartRec(recScore, load);
+
+  // Recovery circles (two instances)
+  ['rec-circle','rec-circle-2'].forEach(function(id) {
+    var c = el(id); if(c) {
+      c.style.strokeDashoffset = 339 - 339*(recScore/100);
+      var col = recScore>=75 ? 'var(--ok)' : recScore>=50 ? 'var(--warn)' : 'var(--danger)';
+      c.style.stroke = col;
+    }
+  });
+  ['rec-score','rec-score-2'].forEach(function(id) { setText(id, recScore); });
+  ['rec-label','rec-label-2'].forEach(function(id) { setText(id, readiness.label); });
+  var descTxt = 'ATL ' + load.atl + '  ·  CTL ' + load.ctl + '  ·  Form ' + (load.tsb>=0?'+':'') + load.tsb + '\n' + (recScore>=75?'Excellent — ready to push hard.':recScore>=50?'Moderate — quality sessions are ok.':'High load — ease off today.');
+  ['rec-desc','rec-desc-2'].forEach(function(id) { setText(id, descTxt); });
+  var rp = el('rec-prog'); if(rp) { rp.style.width = recScore+'%'; rp.style.background = recScore>=75?'var(--ok)':recScore>=50?'var(--warn)':'var(--danger)'; }
+  setText('atl', load.atl); setText('ctl', load.ctl); setText('tss-7', load.tss7);
+  var tsbEl = el('tsb'); if(tsbEl) { tsbEl.textContent = (load.tsb>=0?'+':'')+load.tsb; tsbEl.style.color = load.tsb>=0?'var(--ok)':'var(--danger)'; }
+
+  // Injury
+  var injPct = Math.min(95, Math.max(5, injRisk));
+  var injLabel = injPct<30?'Low Risk':injPct<60?'Moderate Risk':'High Risk';
+  var injColor = injPct<30?'var(--ok)':injPct<60?'var(--warn)':'var(--danger)';
+  ['injury-label','inj-label2'].forEach(function(id) { var e = el(id); if(e) {e.textContent=injLabel; e.style.color=injColor;} });
+  ['injury-needle','inj-needle2'].forEach(function(id) { var e = el(id); if(e) e.style.left=injPct+'%'; });
+  var injTxt = 'ATL / CTL ratio: ' + (load.ctl>0?(load.atl/load.ctl).toFixed(2):'n/a') + '\nSessions this week: ' + getWeekActivities().length + '\nRecovery: ' + recScore + '%';
+  ['injury-factors','inj-factors2'].forEach(function(id) { setText(id, injTxt); });
+
+  // Readiness bar
+  var rlEl = el('readiness-label'); if(rlEl) { rlEl.textContent = readiness.label; rlEl.style.color = readiness.color; }
+  ['rb-under','rb-mod','rb-ready','rb-over'].forEach(function(id) { var e = el(id); if(e) e.classList.remove('active'); });
+  var rbA = el('rb-'+readiness.key); if(rbA) rbA.classList.add('active');
+  setText('readiness-sub', 'Recovery ' + recScore + '%  ·  7d TSS ' + load.tss7 + '  ·  Form ' + (load.tsb>=0?'+':'') + load.tsb);
+
+  // AI rec
+  setText('rec-title-el', rec.title); setText('rec-detail-el', rec.detail);
+
+  // Dashboard stats
+  var wk = getWeekActivities();
+  var wkKm = wk.filter(function(a){return a.sport==='run';}).reduce(function(s,a){return s+(a.dist||0);},0);
+  var wkHrs = wk.reduce(function(s,a){return s+(a.dur||0);},0)/60;
+  var wkTSS = wk.reduce(function(s,a){return s+(a.tss||0);},0);
+  var todayCals = getTodayActivities().reduce(function(s,a){return s+(a.cals||0);},0) + bmr;
+  setText('d-run-km', wkKm.toFixed(1)); setText('d-cals', todayCals.toLocaleString());
+  setText('d-load', Math.round(wkTSS)); setText('d-hours', wkHrs.toFixed(1));
+
+  // Perf age
+  setText('perf-age', perfAge);
+  setText('perf-age-desc', 'Based on VO2 ' + p.vo2 + ' and marathon 3:54. Your physiological profile is that of a ' + perfAge + '-year-old athlete.');
+  var vpct = Math.min(99, Math.round(50 + wkHrs * 4));
+  var vpEl = el('vol-pct'); if(vpEl) vpEl.textContent = vpct + 'th';
+  setText('vol-pct-desc', wkHrs.toFixed(1) + ' hrs training this week — ' + (vpct>90?'elite level commitment.':vpct>70?'well above average adult.':'keep building volume.'));
+
+  // Running page
+  setText('rn-vo2', p.vo2 || 58);
+
+  renderPercentiles(); renderHighlights();
+  renderLogSection('recent-log', S.activities.slice(0,8));
+  renderRunPage(); renderTennisPage(); renderPadelPage();
+  renderGolfPage(); renderGymPage(); renderSwimPage(); renderBikePage();
+  renderSleepPage(); renderPRLeaderboard(); renderIronmanProgress();
+  renderImprovementTimeline();
+}
+
+// ============================
+// SPORT ICON HELPERS
+// ============================
+var SPORT_ICONS_MAP = {run:'🏃',tennis:'🎾',padel:'🏓',golf:'⛳',gym:'💪',swim:'🏊',bike:'🚴'};
+var SPORT_BG = {run:'rgba(74,222,158,.08)',tennis:'rgba(253,224,71,.08)',padel:'rgba(216,180,254,.08)',golf:'rgba(96,184,255,.08)',gym:'rgba(255,107,91,.08)',swim:'rgba(56,217,245,.08)',bike:'rgba(251,146,60,.08)'};
+
+function buildSimpleRow(icon, title, meta, val) {
+  var row = document.createElement('div'); row.className = 'li';
+  var iconEl = document.createElement('div'); iconEl.className = 'li-icon';
+  iconEl.style.background = 'var(--surface3)'; iconEl.textContent = icon;
+  var info = document.createElement('div'); info.className = 'li-info';
+  var t = document.createElement('div'); t.className = 'li-title'; t.textContent = title;
+  var m = document.createElement('div'); m.className = 'li-meta'; m.textContent = meta;
+  info.appendChild(t); info.appendChild(m);
+  var v = document.createElement('div'); v.className = 'li-val'; v.textContent = val;
+  row.appendChild(iconEl); row.appendChild(info); row.appendChild(v);
+  return row;
+}
+
+function buildLogItem(a) {
+  var row = document.createElement('div'); row.className = 'li';
+  var icon = document.createElement('div'); icon.className = 'li-icon';
+  icon.style.background = SPORT_BG[a.sport] || 'var(--surface3)';
+  icon.textContent = SPORT_ICONS_MAP[a.sport] || '?';
+  var info = document.createElement('div'); info.className = 'li-info';
+  var titleEl = document.createElement('div'); titleEl.className = 'li-title';
+  var metaEl = document.createElement('div'); metaEl.className = 'li-meta';
+  var valEl = document.createElement('div'); valEl.className = 'li-val';
+
+  if(a.sport === 'run') {
+    titleEl.textContent = (a.type||'Run') + '  ·  ' + (a.dist||'?') + ' km';
+    metaEl.textContent = a.date + (a.dur?' · '+a.dur+'min':'') + '  ·  ' + fmtPace(a.pace) + '/km' + (a.hr?' · '+a.hr+'bpm':'');
+    valEl.textContent = fmtPace(a.pace);
+  } else if(a.sport === 'tennis') {
+    titleEl.textContent = 'vs ' + (a.opponent||'?') + '  ·  ' + (a.result==='W'?'WIN':'LOSS');
+    metaEl.textContent = a.date + (a.score?' · '+a.score:'') + (a.surface?' · '+a.surface:'');
+    valEl.textContent = a.result; valEl.style.color = a.result==='W'?'var(--ok)':'var(--danger)';
+  } else if(a.sport === 'padel') {
+    titleEl.textContent = 'Padel  ·  ' + (a.result==='W'?'WIN':'LOSS');
+    metaEl.textContent = a.date + (a.score?' · '+a.score:'') + (a.venue?' · '+a.venue:'');
+    valEl.textContent = a.result; valEl.style.color = a.result==='W'?'var(--ok)':'var(--danger)';
+  } else if(a.sport === 'golf') {
+    var diff = a.score - a.par;
+    titleEl.textContent = (a.course||'Golf Round');
+    metaEl.textContent = a.date + '  ·  Score: ' + a.score + ' (' + (diff>=0?'+':'') + diff + ')  ·  Putts: ' + (a.putts||'–');
+    valEl.textContent = a.score;
+  } else if(a.sport === 'gym') {
+    titleEl.textContent = (a.type||'Gym') + (a.pr?' — PR':'') + '  ·  ' + (a.dur||'?') + 'min';
+    metaEl.textContent = a.date + (a.volume?' · Vol: '+a.volume.toLocaleString()+'kg':'') + '  ·  RPE ' + (a.rpe||'?');
+    valEl.textContent = (a.volume||0) + 'kg';
+  } else if(a.sport === 'swim') {
+    titleEl.textContent = (a.type||'Swim') + '  ·  ' + (a.dist||'?') + 'm';
+    var p100 = a.pace100 ? fmtPace(a.pace100/60) + '/100m' : '';
+    metaEl.textContent = a.date + (a.dur?' · '+a.dur+'min':'') + (p100?' · '+p100:'');
+    valEl.textContent = (a.dist||0) + 'm';
+  } else if(a.sport === 'bike') {
+    titleEl.textContent = (a.type||'Ride') + '  ·  ' + (a.dist||'?') + 'km';
+    metaEl.textContent = a.date + (a.dur?' · '+a.dur+'min':'') + (a.speed?' · '+a.speed+'km/h':'');
+    valEl.textContent = (a.dist||0) + 'km';
+  }
+  if(a.notes) metaEl.textContent += '  ·  ' + a.notes;
+  info.appendChild(titleEl); info.appendChild(metaEl);
+  row.appendChild(icon); row.appendChild(info); row.appendChild(valEl);
+  return row;
+}
+
+function renderLogSection(containerId, items) {
+  var c = el(containerId); if(!c) return;
+  c.innerHTML = '';
+  if(!items || !items.length) {
+    var d = document.createElement('div');
+    d.style.cssText = 'font-family:var(--font-mono);font-size:10px;color:var(--text-dim);padding:20px;text-align:center;letter-spacing:.5px';
+    d.textContent = 'No activities recorded yet.'; c.appendChild(d); return;
+  }
+  var list = document.createElement('div'); list.className = 'log-list';
+  items.forEach(function(a) { list.appendChild(buildLogItem(a)); });
+  c.appendChild(list);
+}
+
+// ============================
+// PERCENTILES
+// ============================
+function renderPercentiles() {
+  var p = S.profile, vo2 = p.vo2 || 58;
+  var vo2Pct = Math.min(99, Math.round(30 + (vo2-35)*2.2));
+  var tenMatches = S.activities.filter(function(a){return a.sport==='tennis';});
+  var tenWR = tenMatches.length ? tenMatches.filter(function(m){return m.result==='W';}).length/tenMatches.length : 0.5;
+  var golfRounds = S.activities.filter(function(a){return a.sport==='golf';});
+  var golfHcp = golfRounds.length ? golfRounds.reduce(function(s,g){return s+(g.score-g.par);},0)/golfRounds.length : 15;
+  var gymSess = S.activities.filter(function(a){return a.sport==='gym';});
+  var gymVol = gymSess.length ? gymSess.reduce(function(s,g){return s+(g.volume||0);},0)/gymSess.length : 0;
+  var rows = [
+    {label:'Running',pct:80,color:'var(--run)'},
+    {label:'VO2 Max',pct:Math.min(99,vo2Pct),color:'var(--gold)'},
+    {label:'Tennis',pct:Math.min(99,Math.round(40+tenWR*40)),color:'var(--tennis)'},
+    {label:'Golf',pct:golfRounds.length?Math.min(99,Math.round(80-golfHcp*2)):0,color:'var(--golf)'},
+    {label:'Gym',pct:gymSess.length?Math.min(99,Math.round(40+gymVol/100)):0,color:'var(--gym)'}
+  ];
+  var c = el('percentile-rows'); if(!c) return; c.innerHTML = '';
+  rows.forEach(function(r) {
+    var row = document.createElement('div'); row.className = 'pct-row';
+    var lbl = document.createElement('div'); lbl.className = 'pct-lbl'; lbl.textContent = r.label;
+    var wrap = document.createElement('div'); wrap.className = 'pct-bar-wrap';
+    var fill = document.createElement('div'); fill.className = 'pct-bar-fill';
+    fill.style.cssText = 'width:'+r.pct+'%;background:'+r.color; wrap.appendChild(fill);
+    var num = document.createElement('div'); num.className = 'pct-num'; num.style.color=r.color; num.textContent=r.pct+'th';
+    row.appendChild(lbl); row.appendChild(wrap); row.appendChild(num);
+    c.appendChild(row);
+  });
+}
+
+// ============================
+// HIGHLIGHTS
+// ============================
+function renderHighlights() {
+  var byDate = {};
+  S.activities.forEach(function(a) {
+    if(!byDate[a.date]) byDate[a.date]={cals:0,dur:0};
+    byDate[a.date].cals += a.cals||0; byDate[a.date].dur += a.dur||0;
+  });
+  var bmr = getBMR(), dates = Object.keys(byDate);
+  var maxCals = dates.reduce(function(m,d){return Math.max(m,byDate[d].cals+bmr);},bmr);
+  var maxHrs = dates.reduce(function(m,d){return Math.max(m,byDate[d].dur/60);},0);
+  var runs = S.activities.filter(function(a){return a.sport==='run'&&a.dist;});
+  var maxKm = runs.length ? Math.max.apply(null,runs.map(function(r){return r.dist;})) : 0;
+  setText('hl-cals', maxCals>bmr ? maxCals.toLocaleString() : '--');
+  setText('hl-hours', maxHrs>0 ? maxHrs.toFixed(1)+'h' : '--');
+  setText('hl-km', maxKm>0 ? maxKm.toFixed(1)+'km' : '--');
+  setText('hl-streak', calcStreak()+'d');
+}
+
+// ============================
+// SPORT PAGE RENDERS
+// ============================
+function renderRunPage() {
+  var runs = S.activities.filter(function(a){return a.sport==='run';});
+  var totalKm = runs.reduce(function(s,r){return s+(r.dist||0);},0);
+  var bestPace = runs.filter(function(r){return r.pace;}).reduce(function(b,r){return(!b||r.pace<b)?r.pace:b;},null);
+  setText('rn-total', totalKm.toFixed(0)); setText('rn-pace', fmtPace(bestPace)); setText('rn-count', runs.length);
+  renderLogSection('run-log', runs);
+}
+function renderTennisPage() {
+  var m = S.activities.filter(function(a){return a.sport==='tennis';});
+  var w = m.filter(function(x){return x.result==='W';}).length;
+  setText('ten-total',m.length); setText('ten-wins',w); setText('ten-loss',m.length-w);
+  setText('ten-wr', m.length?Math.round(w/m.length*100)+'%':'--');
+  renderLogSection('ten-log',m);
+}
+function renderPadelPage() {
+  var m = S.activities.filter(function(a){return a.sport==='padel';});
+  var w = m.filter(function(x){return x.result==='W';}).length;
+  setText('pad-total',m.length); setText('pad-wins',w); setText('pad-loss',m.length-w);
+  setText('pad-wr', m.length?Math.round(w/m.length*100)+'%':'--');
+  renderLogSection('pad-log',m);
+}
+function renderGolfPage() {
+  var r = S.activities.filter(function(a){return a.sport==='golf';});
+  var scores = r.filter(function(x){return x.score;}).map(function(x){return x.score;});
+  var putts = r.filter(function(x){return x.putts;}).map(function(x){return x.putts;});
+  setText('golf-rounds',r.length); setText('golf-best', scores.length?Math.min.apply(null,scores):'--');
+  setText('golf-putts', putts.length?(putts.reduce(function(a,b){return a+b;},0)/putts.length).toFixed(1):'--');
+  var hcps = r.filter(function(x){return x.score&&x.par;}).map(function(x){return x.score-x.par;});
+  var hcp = hcps.length?(hcps.slice(-5).reduce(function(a,b){return a+b;},0)/Math.min(hcps.length,5)).toFixed(1):'--';
+  setText('golf-hcp', hcp!=='--'?(hcp>0?'+':'')+hcp:'--');
+  renderLogSection('golf-log',r);
+}
+function renderGymPage() {
+  var s = S.activities.filter(function(a){return a.sport==='gym';});
+  var vol = s.reduce(function(x,g){return x+(g.volume||0);},0);
+  var avgDur = s.length?s.reduce(function(x,g){return x+(g.dur||0);},0)/s.length:0;
+  setText('gym-sessions',s.length); setText('gym-volume',(vol/1000).toFixed(1));
+  setText('gym-avg-dur', s.length?Math.round(avgDur):'--'); setText('gym-prs',s.filter(function(x){return x.pr;}).length);
+  renderLogSection('gym-log',s);
+}
+function renderSwimPage() {
+  var s = S.activities.filter(function(a){return a.sport==='swim';});
+  var total = s.reduce(function(x,a){return x+(a.dist||0);},0);
+  setText('sw-total',total.toLocaleString()); setText('sw-count',s.length);
+  var paces = s.filter(function(x){return x.pace100;}).map(function(x){return parseFloat(x.pace100);});
+  if(paces.length){var b=Math.min.apply(null,paces),bm=Math.floor(b/60),bs=Math.round(b%60);setText('sw-best',bm+':'+(bs<10?'0':'')+bs);}
+  else setText('sw-best','--');
+  renderLogSection('sw-log',s);
+}
+function renderBikePage() {
+  var r = S.activities.filter(function(a){return a.sport==='bike';});
+  var total = r.reduce(function(x,a){return x+(a.dist||0);},0);
+  var speeds = r.filter(function(a){return a.speed&&parseFloat(a.speed)>0;}).map(function(a){return parseFloat(a.speed);});
+  setText('bk-total',total.toFixed(0)); setText('bk-count',r.length);
+  setText('bk-speed', speeds.length?(speeds.reduce(function(a,b){return a+b;},0)/speeds.length).toFixed(1):'--');
+  renderLogSection('bk-log',r);
+}
+
+// ============================
+// PR LEADERBOARD
+// ============================
+function renderPRLeaderboard() {
+  var runs = S.activities.filter(function(a){return a.sport==='run'&&a.dist&&a.dur;});
+  var distances = [{label:'5 km',km:5},{label:'10 km',km:10},{label:'Half Marathon',km:21.1},{label:'Marathon',km:42.2}];
+  var medals = ['🥇','🥈','🥉'];
+
+  function buildLBRow(rank, title, meta, val, isGold) {
+    var row = document.createElement('div'); row.className = 'lb-row' + (isGold?' rank-1':rank===2?' rank-2':rank===3?' rank-3':'');
+    var rankEl = document.createElement('div'); rankEl.className = 'lb-rank';
+    rankEl.textContent = medals[rank-1]||('#'+rank);
+    rankEl.style.color = rank===1?'var(--gold)':rank===2?'var(--platinum-dim)':'#b47c3c';
+    var info = document.createElement('div'); info.className = 'lb-info';
+    var n = document.createElement('div'); n.className = 'lb-name'; n.textContent = title;
+    var m = document.createElement('div'); m.className = 'lb-meta'; m.textContent = meta;
+    info.appendChild(n); info.appendChild(m);
+    var v = document.createElement('div'); v.className = 'lb-val'; v.textContent = val;
+    v.style.color = rank===1?'var(--gold)':'var(--text)';
+    row.appendChild(rankEl); row.appendChild(info); row.appendChild(v);
+    return row;
+  }
+
+  var prRunEl = el('pr-run'); if(prRunEl) {
+    prRunEl.innerHTML = '';
+    prRunEl.appendChild(buildLBRow(1, 'Marathon (42.2 km)', 'Personal Best — Road Race', '3:54:00', true));
+    distances.forEach(function(d,i) {
+      var eligible = runs.filter(function(r){return r.dist>=d.km;});
+      if(!eligible.length) return;
+      var best = eligible.reduce(function(b,r){var t=r.pace*d.km; return(!b||t<b.t)?{r:r,t:t}:b;},null);
+      if(!best) return;
+      prRunEl.appendChild(buildLBRow(i+2, d.label, best.r.date, fmtTime(best.t), false));
+    });
+  }
+
+  function simplePRList(id, items, lFn, vFn, mFn) {
+    var c = el(id); if(!c) return; c.innerHTML = '';
+    if(!items.length){var d=document.createElement('div');d.style.cssText='font-family:var(--font-mono);font-size:10px;color:var(--text-dim);padding:12px';d.textContent='Log activities to see PRs.';c.appendChild(d);return;}
+    items.slice(0,5).forEach(function(item,i){c.appendChild(buildLBRow(i+1,lFn(item),mFn(item),vFn(item),i===0));});
+  }
+  simplePRList('pr-swim', S.activities.filter(function(a){return a.sport==='swim'&&a.dist&&a.dur;}),
+    function(s){return s.dist+'m swim';}, function(s){return s.dur+'min';}, function(s){return s.date;});
+  simplePRList('pr-bike', S.activities.filter(function(a){return a.sport==='bike'&&a.dist&&a.dur;}),
+    function(b){return b.dist+'km ride';}, function(b){return b.dist+'km';}, function(b){return b.date+' · '+(b.speed||'?')+'km/h';});
+  simplePRList('pr-gym-lb', S.activities.filter(function(a){return a.sport==='gym'&&a.pr;}),
+    function(g){return g.pr;}, function(g){return '';}, function(g){return g.date+' · '+g.type;});
+}
+
+// ============================
+// RACE PREDICTOR
+// ============================
+function buildRacePredictor() {
+  var c = el('race-predictor'); if(!c) return; c.innerHTML = '';
+  var mMin=234, mKm=42.195;
+  var races=[{name:'5 km',dist:5},{name:'10 km',dist:10},{name:'Half Marathon',dist:21.1},{name:'Marathon',dist:42.2,actual:'3:54:00'},{name:'50 km Ultra',dist:50},{name:'Ironman Run (42km)',dist:42.2,note:'after 3.8km swim + 180km bike'}];
+  races.forEach(function(r) {
+    var pred = mMin * Math.pow(r.dist/mKm, 1.06);
+    var h=Math.floor(pred/60),m=Math.floor(pred%60),s=Math.round((pred%1)*60);
+    var ts = h+':'+(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+    var row = document.createElement('div'); row.className = 'pred-row';
+    var left = document.createElement('div');
+    var nm = document.createElement('div'); nm.className = 'pred-name'; nm.textContent = r.name; left.appendChild(nm);
+    if(r.note){var nt=document.createElement('div');nt.className='pred-note';nt.textContent=r.note;left.appendChild(nt);}
+    var right = document.createElement('div'); right.style.textAlign='right';
+    var tv = document.createElement('div'); tv.className = 'pred-time';
+    tv.style.color = r.actual?'var(--gold)':'var(--text)'; tv.textContent = r.actual||ts; right.appendChild(tv);
+    var tg = document.createElement('div'); tg.className = 'pred-tag';
+    tg.style.color = r.actual?'var(--ok)':'var(--text-dim)'; tg.textContent = r.actual?'Actual Result':'Predicted'; right.appendChild(tg);
+    row.appendChild(left); row.appendChild(right); c.appendChild(row);
+  });
+}
+
+// ============================
+// IRONMAN PLAN
+// ============================
+function buildIronmanPlan() {
+  var plan=[['REST','Swim 1.5k','Bike 40k','Run 8k','Tennis','Gym','Long Run 16k'],['REST','Swim 2k','Bike 50k','Run 10k','Padel','Gym','Long Bike 60k'],['REST','Swim 2k','Run 10k','Bike 60k','REST','Gym','Long Run 20k'],['REST','Swim 1.5k','Easy Run 8k','Bike 40k','Tennis','REST','REST'],['REST','Swim 2.5k','Bike 70k','Run 12k','REST','Gym','Long Run 24k'],['REST','Swim 3k','Bike 80k','Run 13k','Padel','Gym','Long Bike 80k'],['REST','Swim 3k','Run 13k','Bike 80k','REST','Gym','Long Run 26k'],['REST','Swim 2k','Easy Run 10k','Bike 50k','Tennis','REST','REST'],['REST','Swim 3k','Bike 90k','Run 14k','REST','Gym','Long Run 28k'],['REST','Swim 3.5k','Bike 100k','Run 16k','Padel','Gym','Long Bike 100k'],['REST','Swim 3.8k','Run 16k','Bike 100k','REST','Gym','Long Run 30k'],['REST','Swim 2.5k','Easy Run 10k','Bike 60k','Tennis','REST','REST'],['REST','Swim 3.8k','Bike 120k','Run 18k','REST','Gym','Long Run 32k'],['REST','Swim 3.8k','Bike 140k','Run 18k','Padel','Gym','Long Bike 120k'],['REST','Swim 3.8k','Run 21k','Bike 100k','REST','Gym','Long Run 24k'],['REST','Swim 3.8k','Bike 160k','Run 20k','REST','Gym','Long Run 32k'],['REST','Swim 2k','Bike 80k','Run 12k','Tennis','REST','Long Run 18k'],['REST','Swim 2k','Bike 60k','Run 10k','REST','REST','Easy 10k'],['REST','Swim 1.5k','Bike 40k','Run 8k','REST','REST','Short Brick'],['REST','Swim 1k','Easy Run 5k','REST','REST','REST','RACE DAY']];
+  function tc(d){if(d==='REST')return{bg:'var(--surface3)',color:'var(--text-ghost)'};if(d.indexOf('Swim')>=0)return{bg:'rgba(56,217,245,.15)',color:'var(--swim)'};if(d.indexOf('Bike')>=0||d.indexOf('Brick')>=0)return{bg:'rgba(251,146,60,.15)',color:'var(--bike)'};if(d.indexOf('Run')>=0)return{bg:'rgba(74,222,158,.15)',color:'var(--run)'};if(d.indexOf('Tennis')>=0||d.indexOf('Padel')>=0)return{bg:'rgba(253,224,71,.1)',color:'var(--tennis)'};if(d.indexOf('Gym')>=0)return{bg:'rgba(255,107,91,.1)',color:'var(--gym)'};return{bg:'var(--surface3)',color:'var(--text-ghost)'};}
+  var c = el('ironman-plan'); if(!c) return; c.innerHTML = '';
+  plan.forEach(function(week,wi){
+    var row=document.createElement('div'); row.style.cssText='display:grid;grid-template-columns:52px repeat(7,1fr);gap:4px;margin-bottom:4px;min-width:600px';
+    var lbl=document.createElement('div'); lbl.style.cssText='font-family:var(--font-mono);font-size:8px;color:var(--text-dim);text-align:right;padding-right:8px;padding-top:10px;letter-spacing:1px'; lbl.textContent='W'+(wi+1); row.appendChild(lbl);
+    week.forEach(function(d){var s=tc(d);var cell=document.createElement('div');cell.className='plan-cell';cell.style.cssText='background:'+s.bg+';color:'+s.color+';';cell.textContent=d;row.appendChild(cell);});
+    c.appendChild(row);
+  });
+}
+
+function setIronman() {
+  var name=gv('iron-name-input'),date=gv('iron-date-input');
+  if(!name||!date) return toast('Enter race name and date');
+  S.ironman={name:name,date:date}; save(); setText('iron-race-name',name); updateIronmanCountdown(); toast('Race set!');
+}
+
+function updateIronmanCountdown() {
+  if(!S.ironman) return;
+  var diff=new Date(S.ironman.date)-new Date(), days=Math.max(0,Math.ceil(diff/86400000));
+  setText('iron-days',days); setText('iron-weeks',Math.floor(days/7));
+}
+
+function renderIronmanProgress() {
+  var wk=getWeekActivities();
+  var sw=wk.filter(function(a){return a.sport==='swim';}).reduce(function(s,a){return s+(a.dist||0);},0)/1000;
+  var bk=wk.filter(function(a){return a.sport==='bike';}).reduce(function(s,a){return s+(a.dist||0);},0);
+  var rn=wk.filter(function(a){return a.sport==='run';}).reduce(function(s,a){return s+(a.dist||0);},0);
+  var sp=Math.min(100,sw/7*100).toFixed(0), bp=Math.min(100,bk/120*100).toFixed(0), rp2=Math.min(100,rn/50*100).toFixed(0);
+  setText('iron-sw-prog',sw.toFixed(1)+'km'); setText('iron-bk-prog',bk.toFixed(0)+'km'); setText('iron-rn-prog',rn.toFixed(1)+'km');
+  setText('iron-sw-pct',sp+'% of 7km weekly target'); setText('iron-bk-pct',bp+'% of 120km weekly target'); setText('iron-rn-pct',rp2+'% of 50km weekly target');
+  var sb=el('iron-sw-bar');if(sb){sb.style.width=sp+'%';sb.style.background='var(--swim)';}
+  var bb=el('iron-bk-bar');if(bb){bb.style.width=bp+'%';bb.style.background='var(--bike)';}
+  var rb=el('iron-rn-bar');if(rb){rb.style.width=rp2+'%';rb.style.background='var(--run)';}
+}
+
+// ============================
+// IMPROVEMENT TIMELINE
+// ============================
+function renderImprovementTimeline() {
+  var c=el('improvement-timeline'); if(!c) return; c.innerHTML='';
+  var events=[];
+  var runs=S.activities.filter(function(a){return a.sport==='run'&&a.dist&&a.pace;}).sort(function(a,b){return a.date.localeCompare(b.date);});
+  if(runs.length>1){var first=runs[0],last2=runs[runs.length-1],imp=first.pace-last2.pace;if(Math.abs(imp)>0.05)events.push({date:last2.date,text:'Pace improved: '+fmtPace(first.pace)+'/km to '+fmtPace(last2.pace)+'/km',color:'var(--run)'});}
+  S.activities.filter(function(a){return a.sport==='gym'&&a.pr;}).forEach(function(g){events.push({date:g.date,text:'PR: '+g.pr,color:'var(--gym)'}); });
+  var ps=S.sleepLog.filter(function(s){return s.quality>=9;});
+  if(ps.length)events.push({date:ps[0].date,text:'Perfect sleep: '+ps[0].hours+'hrs (quality '+ps[0].quality+'/10)',color:'var(--golf)'});
+  events.push({date:'MILESTONE',text:'Marathon 3:54:00 completed — personal milestone!',color:'var(--gold)'});
+  if(events.length<=1){var d=document.createElement('div');d.style.cssText='font-family:var(--font-mono);font-size:10px;color:var(--text-dim);padding:10px';d.textContent='Log more activities to build your timeline.';c.appendChild(d);return;}
+  events.sort(function(a,b){return b.date.localeCompare(a.date);});
+  events.forEach(function(e){
+    var item=document.createElement('div');item.className='tl-item';
+    var dot=document.createElement('div');dot.className='tl-dot';dot.style.cssText='background:'+e.color+';border-color:'+e.color;
+    var dt=document.createElement('div');dt.className='tl-date';dt.textContent=e.date==='MILESTONE'?'MILESTONE':e.date;
+    var tx=document.createElement('div');tx.className='tl-text';tx.textContent=e.text;
+    item.appendChild(dot);item.appendChild(dt);item.appendChild(tx);c.appendChild(item);
+  });
+}
+
+// ============================
+// HEATMAP
+// ============================
+function buildHeatmap() {
+  var c=el('heatmap');if(!c)return;c.innerHTML='';
+  var counts={};
+  S.activities.forEach(function(a){counts[a.date]=(counts[a.date]||0)+1;});
+  var now=new Date(),start=new Date(now.getFullYear(),0,1),firstDay=start.getDay();
+  for(var w=0;w<53;w++){
+    var col=document.createElement('div');col.className='hm-col';
+    for(var d=0;d<7;d++){
+      var cell=document.createElement('div');cell.className='hm-c';
+      var dt=new Date(start.getTime());dt.setDate(dt.getDate()+w*7+d-firstDay);
+      var ds=dt.toISOString().split('T')[0];
+      var cnt=counts[ds]||0;
+      if(cnt===1)cell.classList.add('l1');else if(cnt===2)cell.classList.add('l2');else if(cnt===3)cell.classList.add('l3');else if(cnt>=4)cell.classList.add('l4');
+      cell.title=ds+(cnt?' · '+cnt+' activities':'');
+      col.appendChild(cell);
+    }
+    c.appendChild(col);
+  }
+}
+
+// ============================
+// FRIENDS LEADERBOARD
+// ============================
+function updateFriendCode() {
+  if(!CURRENT_USER) return;
+  var code = generateFriendCode(CURRENT_USER);
+  setText('my-friend-code', code);
+}
+
+function copyFriendCode() {
+  var code = generateFriendCode(CURRENT_USER);
+  navigator.clipboard.writeText(code).then(function(){toast('Code copied!');}).catch(function(){toast('Code: '+code);});
+}
+
+function addFriend() {
+  var code = gv('friend-code-input').toUpperCase().trim();
+  var nick = gv('friend-nick').trim();
+  if(!code || code.length < 4) return toast('Enter a valid friend code');
+  // Find which account has this code
+  var accounts = getAccounts(), found = null;
+  Object.keys(accounts).forEach(function(u) {
+    if(generateFriendCode(u) === code && u !== CURRENT_USER) found = u;
+  });
+  if(!found) return toast('Code not found. Make sure your friend is registered.');
+  if(S.friends.some(function(f){return f.username===found;})) return toast('Already connected!');
+  S.friends.push({username:found, nick:nick||found, addedAt:isoToday()});
+  save(); renderFriendsPage();
+  var fi=el('friend-code-input');if(fi)fi.value='';
+  var fn=el('friend-nick');if(fn)fn.value='';
+  toast('Friend added!');
+}
+
+function getFriendStats(username) {
+  var accounts = getAccounts();
+  if(!accounts[username]) return null;
+  var data = accounts[username].data;
+  var ws = getWeekStart();
+  var wkActs = (data.activities||[]).filter(function(a){return a.date>=ws;});
+  var wkKm = wkActs.filter(function(a){return a.sport==='run';}).reduce(function(s,a){return s+(a.dist||0);},0);
+  return {
+    name: (data.profile&&data.profile.name) || username,
+    totalActs: (data.activities||[]).length,
+    wkKm: wkKm,
+    wkActs: wkActs.length,
+    vo2: (data.profile&&data.profile.vo2) || 0
+  };
+}
+
+function renderFriendsPage() {
+  updateFriendCode();
+  var fl = el('friends-list'); if(fl) {
+    fl.innerHTML = '';
+    if(!S.friends.length) {
+      var d=document.createElement('div');d.style.cssText='font-family:var(--font-mono);font-size:10px;color:var(--text-dim);padding:16px;text-align:center';d.textContent='No friends connected yet. Share your code to get started.';fl.appendChild(d);
+    } else {
+      var list=document.createElement('div');list.className='log-list';
+      S.friends.forEach(function(f){
+        var stats=getFriendStats(f.username);
+        var row=buildSimpleRow('👤',f.nick||f.username,'Connected since '+f.addedAt+(stats?' · '+stats.totalActs+' activities':''),stats?stats.wkKm.toFixed(1)+'km':'');
+        list.appendChild(row);
+      });
+      fl.appendChild(list);
+    }
+  }
+
+  // KM leaderboard
+  var kmLB = el('friends-lb-km'); if(kmLB) {
+    kmLB.innerHTML = '';
+    var myStats = getFriendStats(CURRENT_USER);
+    var entries = [{name:(S.profile.name||CURRENT_USER)+' (You)', wkKm:(myStats?myStats.wkKm:0), isMe:true}];
+    S.friends.forEach(function(f){var st=getFriendStats(f.username);if(st)entries.push({name:f.nick||f.username,wkKm:st.wkKm,isMe:false});});
+    entries.sort(function(a,b){return b.wkKm-a.wkKm;});
+    if(!entries.length){var d=document.createElement('div');d.style.cssText='font-family:var(--font-mono);font-size:10px;color:var(--text-dim);padding:12px';d.textContent='Add friends to see leaderboard.';kmLB.appendChild(d);}
+    else {
+      entries.forEach(function(e,i){
+        var row=document.createElement('div');row.className='lb-row'+(i===0?' rank-1':i===1?' rank-2':i===2?' rank-3':'');
+        var medals=['🥇','🥈','🥉'];
+        var rk=document.createElement('div');rk.className='lb-rank';rk.textContent=medals[i]||('#'+(i+1));rk.style.color=i===0?'var(--gold)':i===1?'var(--platinum-dim)':'#b47c3c';
+        var info=document.createElement('div');info.className='lb-info';
+        var nm=document.createElement('div');nm.className='lb-name';nm.textContent=e.name+(e.isMe?' ★':'');if(e.isMe)nm.style.color='var(--gold)';
+        var m=document.createElement('div');m.className='lb-meta';m.textContent='This week';
+        info.appendChild(nm);info.appendChild(m);
+        var v=document.createElement('div');v.className='lb-val';v.textContent=e.wkKm.toFixed(1)+'km';v.style.color=i===0?'var(--gold)':'var(--text)';
+        row.appendChild(rk);row.appendChild(info);row.appendChild(v);kmLB.appendChild(row);
+      });
+    }
+  }
+
+  // Acts leaderboard
+  var actsLB = el('friends-lb-acts'); if(actsLB) {
+    actsLB.innerHTML = '';
+    var myActs = S.activities.length;
+    var entries2 = [{name:(S.profile.name||CURRENT_USER)+' (You)', total:myActs, isMe:true}];
+    S.friends.forEach(function(f){var st=getFriendStats(f.username);if(st)entries2.push({name:f.nick||f.username,total:st.totalActs,isMe:false});});
+    entries2.sort(function(a,b){return b.total-a.total;});
+    entries2.forEach(function(e,i){
+      var row=document.createElement('div');row.className='lb-row'+(i===0?' rank-1':i===1?' rank-2':i===2?' rank-3':'');
+      var medals=['🥇','🥈','🥉'];
+      var rk=document.createElement('div');rk.className='lb-rank';rk.textContent=medals[i]||('#'+(i+1));rk.style.color=i===0?'var(--gold)':i===1?'var(--platinum-dim)':'#b47c3c';
+      var info=document.createElement('div');info.className='lb-info';
+      var nm=document.createElement('div');nm.className='lb-name';nm.textContent=e.name+(e.isMe?' ★':'');if(e.isMe)nm.style.color='var(--gold)';
+      var m=document.createElement('div');m.className='lb-meta';m.textContent='Total logged activities';
+      info.appendChild(nm);info.appendChild(m);
+      var v=document.createElement('div');v.className='lb-val';v.textContent=e.total;v.style.color=i===0?'var(--gold)':'var(--text)';
+      row.appendChild(rk);row.appendChild(info);row.appendChild(v);actsLB.appendChild(row);
+    });
+  }
+}
+
+// ============================
+// CHARTS
+// ============================
+var apexCharts = {};
+
+function mkChart(id, type, labels, datasets, extraScales) {
+  if(apexCharts[id]){try{apexCharts[id].destroy();}catch(e){}}
+  var canvas=el(id);if(!canvas)return;
+  var gc='rgba(255,255,255,0.05)',tc='rgba(255,255,255,0.35)';
+  apexCharts[id]=new Chart(canvas,{
+    type:type,
+    data:{labels:labels,datasets:datasets},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#16161f',titleColor:'#eeeef6',bodyColor:'#9999b0',borderColor:'rgba(201,168,76,.2)',borderWidth:1,padding:10}},
+      scales:extraScales||{x:{grid:{color:gc},ticks:{color:tc,font:{family:'DM Mono',size:9}}},y:{grid:{color:gc},ticks:{color:tc,font:{family:'DM Mono',size:9}}}}
+    }
+  });
+}
+
+function buildCharts() {
+  var weeks=[],labels=[];
+  for(var i=11;i>=0;i--){var d=new Date();d.setDate(d.getDate()-i*7);weeks.push(d.toISOString().split('T')[0]);labels.push(i===0?'Now':'W-'+i);}
+  var weeklyKm=weeks.map(function(ws){var we=new Date(ws);we.setDate(we.getDate()+7);var wes=we.toISOString().split('T')[0];return S.activities.filter(function(a){return a.sport==='run'&&a.date>=ws&&a.date<wes;}).reduce(function(s,r){return s+(r.dist||0);},0);});
+  mkChart('timeline-chart','line',labels,[{label:'Run KM',data:weeklyKm,borderColor:'rgba(201,168,76,.8)',backgroundColor:'rgba(201,168,76,.06)',fill:true,tension:.4,pointRadius:4,pointBackgroundColor:'rgba(201,168,76,1)',borderWidth:2}]);
+  mkChart('volume-chart','bar',labels,[{label:'Run KM',data:weeklyKm,backgroundColor:'rgba(201,168,76,.25)',borderColor:'rgba(201,168,76,.6)',borderWidth:1,borderRadius:6}]);
+  var weekCals=weeks.map(function(ws){var we=new Date(ws);we.setDate(we.getDate()+7);var wes=we.toISOString().split('T')[0];return S.activities.filter(function(a){return a.date>=ws&&a.date<wes;}).reduce(function(s,a){return s+(a.cals||0);},0);});
+  mkChart('cal-chart','line',labels,[{label:'Cals',data:weekCals,borderColor:'rgba(255,107,91,.8)',backgroundColor:'rgba(255,107,91,.06)',fill:true,tension:.4,pointRadius:3,pointBackgroundColor:'rgba(255,107,91,1)',borderWidth:2}]);
+}
+
+function buildLoadChart() {
+  var days=[],labels=[];
+  for(var i=27;i>=0;i--){var d=new Date();d.setDate(d.getDate()-i);days.push(d.toISOString().split('T')[0]);labels.push(i===0?'Today':(i%7===0?'-'+i+'d':''));}
+  var tss=days.map(function(d){return S.activities.filter(function(a){return a.date===d;}).reduce(function(s,a){return s+(a.tss||0);},0);});
+  mkChart('load-chart','bar',labels,[{label:'TSS',data:tss,backgroundColor:'rgba(201,168,76,.3)',borderColor:'rgba(201,168,76,.7)',borderWidth:1,borderRadius:4}]);
+}
+
+function buildSleepChart() {
+  var logs=S.sleepLog.slice(0,14).reverse();
+  if(!logs.length)return;
+  var gc='rgba(255,255,255,0.04)',tc='rgba(255,255,255,0.35)';
+  mkChart('sleep-chart','bar',logs.map(function(s){return s.date.slice(5);}),
+    [{label:'Hours',data:logs.map(function(s){return s.hours;}),backgroundColor:'rgba(96,184,255,.25)',borderColor:'rgba(96,184,255,.7)',borderWidth:1,borderRadius:4},
+     {label:'Quality',data:logs.map(function(s){return s.quality;}),backgroundColor:'rgba(201,168,76,.25)',borderColor:'rgba(201,168,76,.7)',borderWidth:1,borderRadius:4,yAxisID:'y1'}],
+    {x:{grid:{color:gc},ticks:{color:tc,font:{size:9}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:9}},max:12},y1:{position:'right',max:10,ticks:{color:tc,font:{size:9}},grid:{display:false}}}
+  );
+}
+
+function buildWeightChart() {
+  var logs=S.weightLog.slice().reverse().slice(-20);
+  if(!logs.length)return;
+  mkChart('weight-chart','line',logs.map(function(w){return w.date.slice(5);}),
+    [{label:'Weight',data:logs.map(function(w){return w.kg;}),borderColor:'rgba(201,168,76,.8)',backgroundColor:'rgba(201,168,76,.06)',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:'rgba(201,168,76,1)',borderWidth:2}]);
+}
+</script>
+</body>
+</html>
